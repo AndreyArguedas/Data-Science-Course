@@ -122,11 +122,83 @@ print(datos_pandas)
 
 #Indique los ´ındices de los valores o entradas del vector cuya divisi´on entre 2 tiene como resultado 45.
 
+x = (24, 28, 29, 18, 95, 97, 90, 72, 87, 85, 74, 9, 40)
+indices = []
+for element in x:
+    if element / 2 == 45:
+        indices.append(x.index(element))
+
+print(indices)
+
+# Indique el ´ındice del valor m´as alto del vector.
+
+x.index(max(x))
+
+# Indique el resultado de la suma de los valores (entradas del vector) menores a la media del vector.
+
+"""
+    Version utilizando reduce
+"""
+from functools import reduce
+
+media = np.mean(x)
+
+reduce((lambda x, y: x + y), list(filter(lambda e: e < media, x)))
+
+# Utilizando el operador l´ogico and (“y”l´ogico) indique cu´ales los valores del vector que son mayores a la media del vector y que sean divisibles entre 2.
+
+media = np.mean(x)
+
+list(filter(lambda e: e > media and e % 2 == 0, x))
 
 
+"""
+5. Para las variables almacenadas de la siguiente forma v1 = (2,7,6,4,52), v2 = (7,5,7,0,1))
+y v3 = (2,4,3,5,6) usando el comando sum calcule la sumatoria de cada una de esas variables.
+Repita lo anterior usando un for(...).
+"""
 
+v1 = (2,7,6,4,52)
+v2 = (7,5,7,0,1)
+v3 = (2,4,3,5,6)
 
+print("Sum v1", sum(v1))
 
+print("Sum v2", sum(v2))
 
+print("Sum v3", sum(v3))
 
+def suma(v):
+    acum = 0
+    for i in v:
+        acum += i
+    return acum
 
+print("--------------------")
+
+print("Suma v1", suma(v1))
+
+print("Suma v2", suma(v2))
+
+print("Suma v3", suma(v3))
+
+"""
+6. Dado x = (24, 28, 29, 18, 95, 97, 90, 72, 87, 85, 74, 9, 40) construya una lista llamada lista1 que
+tenga 3 campos Media, M´aximo y M´ınimo que tienen la media, el m´aximo y el m´ınimo respectivamente del vector x.
+"""
+
+x = (24, 28, 29, 18, 95, 97, 90, 72, 87, 85, 74, 9, 40)
+lista1 = [np.mean(x), max(x), min(x)]
+print(lista1)
+
+"""
+Escriba el c´odigo Python necesario para efectuar la siguiente operaci´on entre matrices:
+
+"""
+
+import numpy as np
+
+M1 = np.matrix([[9, 3, 4], [1, 3, -1]])
+M2 = np.matrix([[91, -3], [1, 8], [-4, 5]])
+A = M1 + 2 * np.transpose(M2)
+print(A)
