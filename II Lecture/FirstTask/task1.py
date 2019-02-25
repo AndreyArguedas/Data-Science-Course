@@ -276,11 +276,22 @@ print(dictionary)
 
 import numpy as np
 dictionary = {}
-for i in range(0, datos_est.shape[1]):
-    minimo = np.min(datos_est.iloc[:,i])
-    maximo = np.max(datos_est.iloc[:,i])
-    media = np.mean(datos_est.iloc[:,i])
-    mediana = np.median(datos_est.iloc[:,i])
-    dictionary[datos_est.columns.values[i]] = { 'Minimo' : minimo, 'Maximo' : maximo, 'Media' : media, 'Mediana' : mediana}
-    
+cuants = datos_est.select_dtypes(include=['float64', 'int64'])
+for i in range(0, cuants.shape[1]):
+    minimo = np.min(cuants.iloc[:,i])
+    maximo = np.max(cuants.iloc[:,i])
+    media = np.mean(cuants.iloc[:,i])
+    mediana = np.median(cuants.iloc[:,i])
+    dictionary[cuants.columns.values[i]] = { 'Minimo' : minimo, 'Maximo' : maximo, 'Media' : media, 'Mediana' : mediana}
+
+chd = datos_est.loc[:,'chd']
+print(chd)
+yesAnswer = 0
+noAnswer = 0
+for i in range(0, chd.shape[0]):
+    if chd[i][1] == "Si":
+        yesAnswer += 1
+    else:
+        noAnswer += 1
+dictionary['chd'] = {'Si' : yesAnswer, 'No' : noAnswer}
 print(dictionary)
