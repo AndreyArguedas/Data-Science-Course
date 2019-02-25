@@ -202,3 +202,85 @@ M1 = np.matrix([[9, 3, 4], [1, 3, -1]])
 M2 = np.matrix([[91, -3], [1, 8], [-4, 5]])
 A = M1 + 2 * np.transpose(M2)
 print(A)
+
+"""
+8. Cargue en un DataFrame el archivo EjemploAlgoritmosRecomendacion.csv y haga lo siguiente:
+"""
+
+import os
+import pandas as pd
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
+pd.set_option('display.max_columns', 10)
+pd.set_option('display.width', 1000)
+datos_est = pd.read_csv('EjemploAlgoritmosRecomendacion.csv',delimiter=';',decimal=",",index_col=0)
+print(datos_est)
+
+# Calcule la dimensi´on de la Tabla de Datos.
+dimension = datos_est.shape
+print("Dimension: " + str(dimension[0]) + " x " + str(dimension[1]))
+
+# Despliegue las primeras 2 columnas de la tabla de datos.
+
+print(datos_est.iloc[:,:1])
+
+# Ejecute un info() de los datos.
+
+datos_est.info()
+
+# Calcule la Media para todas las variables cualesquiera.
+import numpy as np
+dictionary = {}
+columns = datos_est.shape[1]
+for i in range(0,columns):
+    media = np.mean(datos_est.iloc[:,i])
+    dictionary[datos_est.columns.values[i]] = media
+print(dictionary)
+
+"""
+9. Cargue la tabla de datos que est´a en el archivo SAheartv.csv haga lo siguiente:
+"""    
+
+import os
+import pandas as pd
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
+pd.set_option('display.max_columns', 10)
+pd.set_option('display.width', 1000)
+datos_est = pd.read_csv('SAheart.csv',delimiter=';',decimal=".",index_col=0)
+print(datos_est)
+
+# Calcule la dimensión de la Tabla de Datos.
+dimension = datos_est.shape
+print("Dimension: " + str(dimension[0]) + " x " + str(dimension[1]))
+
+# Despliegue las primeras 3 columnas de la tabla de datos
+
+print(datos_est.iloc[:,:2]) 
+
+#Ejecute un info de los datos
+
+datos_est.info()
+
+# Calcule la suma de las columnas con variables cuantitativas (num´ericas).
+
+import numpy as np
+cuants = datos_est.select_dtypes(include=['float64', 'int64'])
+dictionary = {}
+for i in range(0, cuants.shape[1]):
+    suma = np.sum(cuants.iloc[:,i])
+    dictionary[cuants.columns.values[i]] = suma
+print(dictionary)
+
+# Calcule para todas las variables cuantitativas presentes en el archivo SAheart.csv: 
+#El m´ınimo, el m´aximo, la media, la mediana y para la variables chd determine 
+#la cantidadde Si y de No.
+
+import numpy as np
+dictionary = {}
+for i in range(0, datos_est.shape[1]):
+    minimo = np.min(datos_est.iloc[:,i])
+    maximo = np.max(datos_est.iloc[:,i])
+    media = np.mean(datos_est.iloc[:,i])
+    mediana = np.median(datos_est.iloc[:,i])
+    dictionary[datos_est.columns.values[i]] = { 'Minimo' : minimo, 'Maximo' : maximo, 'Media' : media, 'Mediana' : mediana}
+    
+print(dictionary)
