@@ -273,7 +273,7 @@ print(dictionary)
 # Calcule para todas las variables cuantitativas presentes en el archivo SAheart.csv: 
 #El m´ınimo, el m´aximo, la media, la mediana y para la variables chd determine 
 #la cantidadde Si y de No.
-
+"""
 import numpy as np
 dictionary = {}
 cuants = datos_est.select_dtypes(include=['float64', 'int64'])
@@ -286,12 +286,132 @@ for i in range(0, cuants.shape[1]):
 
 chd = datos_est.loc[:,'chd']
 print(chd)
+
 yesAnswer = 0
 noAnswer = 0
 for i in range(0, chd.shape[0]):
-    if chd[i][1] == "Si":
+    if chd.loc[i, 1] == "Si":
         yesAnswer += 1
     else:
         noAnswer += 1
 dictionary['chd'] = {'Si' : yesAnswer, 'No' : noAnswer}
 print(dictionary)
+"""
+
+"""
+10. Suponga que tenemos en una lista las notas de un estudiante en 3 ex´amenes, por ejemplo notas
+= (90,45,89), luego escriba instrucciones en Python para calcular el promedio y se despliegue
+“Gan´o el curso” si la nota es mayor o igual a 67.5, “Extraordinario” si la nota es mayor o igual
+a 47.5 y menor a 67.5, “Perdi´o el curso” si la nota es menor a 47.5.
+"""
+
+notas = (90,45,89)
+promedio = np.average(notas)
+if promedio < 47.5:
+    print("Perdió el curso")
+elif promedio >= 47.5 and promedio < 67.5:
+    print("Extraordinario")
+elif promedio >= 67.5:
+    print("Ganó el curso")
+
+"""
+11. Escriba instrucciones en Python tal que dada la lista lista = (-9,-45,0,7,45,-100,89),
+calcule la suma de los n´umeros positivos, la suma de los n´umeros negativos en valor absoluto
+y al final despliegue la suma m´as grande.
+"""
+
+lista = (-9,-45,0,7,45,-100,89)
+positivos = list(filter(lambda e: e >= 0, lista))
+negativos = list(filter(lambda e: e < 0, lista))
+negativos = list(map(lambda e: abs(e), negativos))
+sumaPos = sum(positivos)
+sumaNeg = sum(negativos)
+if sumaPos > sumaNeg:
+    print("Suma Positivos es mayor :", sumaPos)
+elif sumaPos == sumaNeg:
+    print("Sumas son iguales :", sumaPos)
+else:
+    print("Sumas Negativos es mayor :", sumaNeg)
+
+"""
+12. Programe en Python una funci´on que recibe dos valores, determinar cu´al de los dos valores es
+el menor y luego lo retorna (no puede usar la funci´on min de Python).
+"""
+
+def menor(v1, v2):
+    return v1 if v1 >= v2 else v2
+
+print("El menor de 34 y 87 es: ", menor(34, 87))
+print("El menor de 541 y 5 es: ", menor(541, 5))
+
+
+"""
+13
+"""
+
+
+"""
+14. Programe en Python una funci´on que recibe cuatro n´umeros y retorna el mayor (no puede usar
+la funci´on max de Python).
+"""
+
+def mayor(v1, v2, v3, v4):
+    argsExcFirst = (v2, v3, v4)
+    maximum = v1
+    for i in argsExcFirst:
+        maximum = i if i >= maximum else maximum
+    return maximum
+
+mayor(58, 63, 1, 987)
+    
+
+"""
+15. Programe en Python una función que recibe un n´umero n y retorna la sumatoria de los n´umeros
+enteros comprendidos entre el 1 y el n.
+"""
+def sumatoria(num):
+    accum = 0
+    for i in range(1, num + 1):
+        accum += i
+    return accum
+
+sumatoria(6)
+
+
+"""
+6. Desarrolle una funci´on que realice la sumatoria de los n´umeros enteros pares comprendidos
+entre el 1 y el n.
+"""
+
+def sumaPares(num):
+    accum = 0
+    for i in filter(lambda e: e %2 == 0, range(1, num + 1)):
+        accum += i
+    return accum
+
+sumaPares(6)
+
+"""
+17. Desarrolle una funci´on que realice la sumatoria de los n´umeros enteros m´ultiplos de 5, 
+    comprendidos entre el 1 y el n.
+"""
+
+def sumaMultiplos(num):
+    accum = 0
+    for i in filter(lambda e: e % 5 == 0, range(1, num + 1)):
+        accum += i
+    return accum
+
+sumaMultiplos(10)
+
+"""
+18. Programe en Python una funci´on que genera 200 n´umeros al azar entre 1 y 500 y luego calcula
+cu´antos est´an entre el 50 y 450, ambos inclusive.
+"""
+
+def genRandNums():
+    from random import randint
+    nums = [randint(1, 500) for p in range(0, 200)]
+    return len(list(filter(lambda e: e in range(50, 450), nums)))
+
+genRandNums()
