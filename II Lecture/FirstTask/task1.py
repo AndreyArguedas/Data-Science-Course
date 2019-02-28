@@ -502,10 +502,32 @@ print(data)
 
 def divisibles(datos):
     acum = 0
-    for i in range(0, datos.shape[0]):
-        for j in range(1, datos.shape[1]):
-            if datos[i][j] % 3 == 0:
+    for i in range(datos.shape[0]):
+        for j in range(datos.shape[1]):
+            if datos.iloc[i, j] % 3 == 0:
                 acum += 1
     return acum;
 
-print(divisibles(data))
+print("El numero de divisibles entre 3 es: ", divisibles(data))
+
+
+"""
+24. Desarrolle una funci´on en Python que recibe un DataFrame y dos n´umeros de columna y
+que retorna en una lista con el nombre de las variables correspondientes a las columnas, la
+covarianza y la correlaci´on entre esas dos variables (Pruebe esta funci´on leyendo un archivo de
+datos, esto en el Script de pruebas).
+"""
+
+import os
+import pandas as pd
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
+pd.set_option('display.max_columns', 6)
+pd.set_option('display.width', 1000)
+data = pd.read_csv('EjemploEstudiantes.csv',delimiter=';',decimal=",",index_col=0)
+
+def covarianza(data, c1, c2):
+    covar = data.iloc[:, c1].cov(data.iloc[:, c2])
+    corre = data.iloc[:, c1].corr(data.iloc[:, c2])
+    return {"Covarianza" : covar, "Correlacion" : corre }
+    
+covarianza(data, 0, 1)
