@@ -23,28 +23,46 @@ print(y)
 
 # Calcule la media, la varianza y la desviacio´n est´andar de y.
 
-import numpy as np
+import math
 
-media = np.mean(y)
-deviacion = np.std(y)
-varianza = np.var(y)
+def media(lista):
+    return sum(lista) / len(lista)
 
-print(media)
-print(deviacion)
-print(varianza)
+def varianza(lista):
+    acum = 0
+    med = media(lista)
+    for i in lista:
+        acum += (i - med) ** 2 
+    return acum / len(lista)
+
+def desviacion(lista):
+    return math.sqrt(varianza(lista))
+
+print(media(y))
+print(varianza(y))
+print(desviacion(y))
+
 
 # Calcule la media, la varianza y la desviacio´n est´andar de x.
 
-media = np.mean(x)
-deviacion = np.std(x)
-varianza = np.var(x)
-
-print(media)
-print(deviacion)
-print(varianza)
+print(media(x))
+print(varianza(x))
+print(desviacion(x))
 
 # Calcule la correlaci´on entre x y y.   //Volver a checkear este ejercicio
 
+def correlacion(x, y):
+    acum = 0
+    for i in range(len(x)):
+        acum += x[i] * y[i]
+    cov = acum / len(x) - media(x) * media(y)
+    print(cov)
+    return cov / desviacion(x) * desviacion(y)
+
+import numpy as np
+
+print(correlacion(x, y))
+print(np.cov(x, y))
 np.corrcoef(x, y)
 
 # Escriba comandos en Python para extraer las entradas 2 a la 7 de x.
