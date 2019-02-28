@@ -51,18 +51,6 @@ print(desviacion(x))
 
 # Calcule la correlaci´on entre x y y.   //Volver a checkear este ejercicio
 
-def correlacion(x, y):
-    acum = 0
-    for i in range(len(x)):
-        acum += x[i] * y[i]
-    cov = acum / len(x) - media(x) * media(y)
-    print(cov)
-    return cov / desviacion(x) * desviacion(y)
-
-import numpy as np
-
-print(correlacion(x, y))
-print(np.cov(x, y))
 np.corrcoef(x, y)
 
 # Escriba comandos en Python para extraer las entradas 2 a la 7 de x.
@@ -239,7 +227,7 @@ print("Dimension: " + str(dimension[0]) + " x " + str(dimension[1]))
 
 # Despliegue las primeras 2 columnas de la tabla de datos.
 
-print(datos_est.iloc[:,:1])
+print(datos_est.iloc[:,:2])
 
 # Ejecute un info() de los datos.
 
