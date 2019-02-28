@@ -15445,7 +15445,7 @@ El costo de una llamada de 5 minutos es:  1.4
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -15458,7 +15458,9 @@ El costo de una llamada de 5 minutos es:  1.4
 <span class="k">def</span> <span class="nf">covarianza</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">):</span>
     <span class="n">covar</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">c1</span><span class="p">]</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">c2</span><span class="p">])</span>
     <span class="n">corre</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">c1</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">c2</span><span class="p">])</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Covarianza&quot;</span> <span class="p">:</span> <span class="n">covar</span><span class="p">,</span> <span class="s2">&quot;Correlacion&quot;</span> <span class="p">:</span> <span class="n">corre</span> <span class="p">}</span>
+    <span class="n">c1name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">c1</span><span class="p">]</span>
+    <span class="n">c2name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">c2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Columna 1&quot;</span> <span class="p">:</span> <span class="n">c1name</span><span class="p">,</span> <span class="s2">&quot;Columna 2&quot;</span> <span class="p">:</span> <span class="n">c2name</span><span class="p">,</span> <span class="s2">&quot;Covarianza&quot;</span> <span class="p">:</span> <span class="n">covar</span><span class="p">,</span> <span class="s2">&quot;Correlacion&quot;</span> <span class="p">:</span> <span class="n">corre</span><span class="p">}</span>
     
 <span class="n">covarianza</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -15473,13 +15475,16 @@ El costo de una llamada de 5 minutos es:  1.4
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[43]:</div>
+    <div class="prompt output_prompt">Out[2]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;Covarianza&#39;: 1.3083333333333333, &#39;Correlacion&#39;: 0.8540787779257429}</pre>
+<pre>{&#39;Columna 1&#39;: &#39;Matematicas&#39;,
+ &#39;Columna 2&#39;: &#39;Ciencias&#39;,
+ &#39;Covarianza&#39;: 1.3083333333333333,
+ &#39;Correlacion&#39;: 0.8540787779257429}</pre>
 </div>
 
 </div>
