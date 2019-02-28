@@ -339,16 +339,22 @@ el menor y luego lo retorna (no puede usar la funci´on min de Python).
 """
 
 def menor(v1, v2):
-    return v1 if v1 >= v2 else v2
+    return v1 if v1 <= v2 else v2
 
 print("El menor de 34 y 87 es: ", menor(34, 87))
 print("El menor de 541 y 5 es: ", menor(541, 5))
 
 
 """
-13
+13 Programe en Python una función que recibe tres valores A, B, y C y 
+retorna el menor (no puede usar la función min de Python)
 """
 
+def menorDe3(a, b, c):
+    minimum = menor(a, b)
+    return c if c <= minimum else minimum
+
+print("El menor de 34, 56 y 87 es: ", menorDe3(34, 56, 87))
 
 """
 14. Programe en Python una funci´on que recibe cuatro n´umeros y retorna el mayor (no puede usar
@@ -415,3 +421,91 @@ def genRandNums():
     return len(list(filter(lambda e: e in range(50, 450), nums)))
 
 genRandNums()
+
+"""
+19. Desarrolle una funci´on que calcula el costo de una llamada telef´onica que ha durado t minutos
+sabiendo que si t < 1 el costo es de 0,4 d´olares, mientras que para duraciones superiores el
+costo es de 0,4 + (t − 1)/4 d´olares, la funci´on debe recibir el valor de t.
+"""
+
+def calculaCosto(t):
+    return 0.4 if t < 1 else 0.4 + (t - 1) / 4
+
+print("El costo de una llamada de 0.9 minutos es: ", calculaCosto(0.9))
+print("El costo de una llamada de 5 minutos es: ", calculaCosto(5))
+
+
+"""
+20. Desarrolle una funci´on que reciba un vector de n´umeros reales y un n´umero real x, tal que
+indique el porcentaje de elementos menores o iguales a un valor x.
+"""
+
+def porcentajeMenores(vec, x):
+    menores = list(filter(lambda e: e <= x, vec))
+    return (len(menores) / len(vec)) * 100
+
+vecPrueba = [ 4, 50, 147, 2, 35, 70, 94]
+print("El porcentaje de #'s menores o iguales a 50 es :", porcentajeMenores(vecPrueba, 50))
+      
+"""
+21. Desarrolle una funci´on que reciba un n´umero natural n (suponiendo que n > 1) y que construya
+y retorne un vector v de tama˜no n tal que vk =
+vk−1
+3 +0,5 para k = 2, . . . , n y siendo que v1 = 1.
+"""
+
+def construyeVec(n, vec = []):
+    if n <= 1:
+        vec.append(1)
+        return vec
+    else:
+        result =  construyeVec(n - 1, vec)[-1] / 3 + 0.5
+        vec.append(result)
+        return vec
+
+print("El resultado para k=4 es: ", construyeVec(4))
+
+"""
+22. Desarrolle una función que recibe una matriz cuadrada A de tamaño n × n y calcula su traza,
+es decir, la suma de los elementos de la diagonal. Por ejemplo, la traza de la siguiente matriz:
+9 3 4
+1 3 −1
+4 12 −2
+
+es 10.
+"""
+
+def traza(matriz):
+    traza = 0
+    for i in range(len(matriz)):
+        traza += matriz[i][i]
+    return traza
+            
+m1 = [[9, 3, 4], [1, 3, -1], [4, 12, -2]]
+print("La traza es de: ", traza(m1))
+
+
+"""
+23. Desarrolle una función en Python que recibe un DataFrame que retorna la cantidad 
+de entradas de este DataFrame que son divisibles entre 3 (Pruebe esta funci´on leyendo un archivo
+de datos, esto en el Script de pruebas).
+"""
+
+
+import os
+import pandas as pd
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
+pd.set_option('display.max_columns', 6)
+pd.set_option('display.width', 1000)
+data = pd.read_csv('EjemploEstudiantes.csv',delimiter=';',decimal=",",index_col=0)
+print(data)
+
+def divisibles(datos):
+    acum = 0
+    for i in range(0, datos.shape[0]):
+        for j in range(1, datos.shape[1]):
+            if datos[i][j] % 3 == 0:
+                acum += 1
+    return acum;
+
+print(divisibles(data))
