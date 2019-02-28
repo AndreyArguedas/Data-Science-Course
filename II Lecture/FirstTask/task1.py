@@ -50,7 +50,7 @@ print(varianza(x))
 print(desviacion(x))
 
 # Calcule la correlaci´on entre x y y.   //Volver a checkear este ejercicio
-
+import numpy as np
 np.corrcoef(x, y)
 
 # Escriba comandos en Python para extraer las entradas 2 a la 7 de x.
