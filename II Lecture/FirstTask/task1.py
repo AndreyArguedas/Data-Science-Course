@@ -534,6 +534,8 @@ data = pd.read_csv('EjemploEstudiantes.csv',delimiter=';',decimal=",",index_col=
 def covarianza(data, c1, c2):
     covar = data.iloc[:, c1].cov(data.iloc[:, c2])
     corre = data.iloc[:, c1].corr(data.iloc[:, c2])
-    return {"Covarianza" : covar, "Correlacion" : corre }
+    c1name = data.columns.values[c1]
+    c2name = data.columns.values[c2]
+    return {"Columna 1" : c1name, "Columna 2" : c2name, "Covarianza" : covar, "Correlacion" : corre}
     
 covarianza(data, 0, 1)
