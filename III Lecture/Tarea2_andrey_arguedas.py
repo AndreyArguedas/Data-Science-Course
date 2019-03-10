@@ -66,7 +66,6 @@ print("El total a pagar es de: ", factura1.total_pagar())
 2. Programe una clase en Python que tiene tres atributos (n´umeros) A, B, y C y m´etodos para
 retornar el menor, el mayor, la suma de los tres y suma cuadrados = A2 + B2 + C
 """
-import math
 
 class Conjunto(object):
     def __init__(self, a, b, c):
@@ -102,9 +101,98 @@ class Conjunto(object):
         return min([self.a, self.b, self.c])
     
     def suma_cuadrados(self):
-        return math.pow(self.a, 2) + math.pow(self.b, 2) + math.pow(self.c, 2)
+        return self.a ** 2 + self.b ** 2 + self.c ** 2
     
 c1 = Conjunto(20, 3, 5)
 print("El mayor es: ", c1.mayor())
 print("El menor es: ", c1.menor())
 print("La suma de cuadrados: ", c1.suma_cuadrados())
+
+
+"""
+3. Una líınea a´erea desea implementar un sistema para el control de sus vuelos, para esto se cuenta
+con la siguiente informaci´on:
+    
+• Se supone que un Vuelo tiene los siguientes atributos: N´umero, Hora de Salida y Hora de
+Llegada.
+
+• Un Vuelo Local (USA) tiene adem´as (respecto a un Vuelo) un N´umero M´ınimo de Pasajeros.
+
+• Un Vuelo Internacional tiene adem´as (respecto a un Vuelo) un Pa´ıs Destino.
+
+• Un Vuelo de Carga tiene adem´as (respecto a un Vuelo) un Peso M´aximo de carga soportado.
+
+• Un Pasajero tiene C´odigo, Nombre, Precio Boleto, Porcentaje Impuesto y Total a Pagar
+= Precio Boleto + Porcentaje Impuesto * Precio Boleto. Los pasajeros son de dos tipos:
+los Pasajero Frecuente y los No Frecuentes, la diferencia es que a los pasajeros frecuentes
+se les aplica un 20 % de descuento en el Total a Pagar.
+
+• La clase Vuelo Local incluye un atributo tipo Pasajero F
+"""
+
+class Pasajero(object):
+    def __init__(self, codigo, nombre, precio_boleto, porcentajeImpuesto):
+        self.__codigo = codigo
+        self.__nombre = nombre
+        self.__precio_boleto = precio_boleto
+        self.__porcentajeImpuesto = porcentajeImpuesto
+        
+    @property
+    def codigo(self):
+        return self.__codigo
+    @codigo.setter
+    def codigo(self, codigo):
+        self.__codigo = codigo
+    
+    @property
+    def nombre(self):
+        return self.__nombre
+    @nombre.setter
+    def nombre(self, nombre):
+        self.__nombre = nombre
+
+    @property
+    def precio_boleto(self):
+        return self.__precio_boleto
+    @precio_boleto.setter
+    def precio_boleto(self, precio_boleto):
+        self.__precio_boleto = precio_boleto
+        
+    @property
+    def porcentajeImpuesto(self):
+        return self.__porcentajeImpuesto
+    @porcentajeImpuesto.setter
+    def porcentajeImpuesto(self, porcentajeImpuesto):
+        self.__porcentajeImpuesto = porcentajeImpuesto
+    
+    def total_pagar(self):
+        return self.precio_boleto + self.porcentajeImpuesto * self.precio_boleto
+
+
+class Vuelo(object):
+    def __init__(self, numero, hora_salida, hora_llegada):
+        self.__numero = numero
+        self.__hora_salida = hora_salida
+        self.__hora_llegada = hora_llegada
+        
+    @property
+    def numero(self):
+        return self.__numero
+    @numero.setter
+    def codigo(self, numero):
+        self.__numero = numero
+    
+    @property
+    def hora_salida(self):
+        return self.__hora_salida
+    @hora_salida.setter
+    def hora_salida(self, hora_salida):
+        self.__hora_salida = hora_salida
+
+    @property
+    def hora_llegada(self):
+        return self.__hora_llegada
+    @hora_llegada.setter
+    def precio_boleto(self, hora_llegada):
+        self.__hora_llegada = hora_llegada
+        
