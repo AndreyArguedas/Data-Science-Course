@@ -167,6 +167,21 @@ class Pasajero(object):
     
     def total_pagar(self):
         return self.precio_boleto + self.porcentajeImpuesto * self.precio_boleto
+    
+class PasajeroFrecuente(Pasajero):
+    def __init__(self, codigo, nombre, precio_boleto, porcentajeImpuesto, descuento = 0.2):
+        super().__init__(codigo, nombre, precio_boleto, porcentajeImpuesto)
+        self.__descuento = descuento
+        
+    @property
+    def descuento(self):
+        return self.__descuento
+    @descuento.setter
+    def descuento(self, descuento):
+        self.__descuento = descuento
+        
+    def total_pagar(self):
+        return self.precio_boleto + self.porcentajeImpuesto * self.precio_boleto - (self.precio_boleto * self.descuento)
 
 
 class Vuelo(object):
@@ -196,3 +211,54 @@ class Vuelo(object):
     def precio_boleto(self, hora_llegada):
         self.__hora_llegada = hora_llegada
         
+class VueloLocal(Vuelo):
+    def __init__(self,  numero, hora_salida, hora_llegada, minimo_pasajeros, codigo, nombre, precio_boleto, porcentajeImpuesto):
+        super().__init__( numero, hora_salida, hora_llegada)
+        self.__minimo_pasajeros = minimo_pasajeros
+        self.__pasajero_frecuente = Pasajero(codigo, nombre, precio_boleto, porcentajeImpuesto)
+        
+    @property
+    def minimo_pasajeros(self):
+        return self.__minimo_pasajeros
+    @minimo_pasajeros.setter
+    def minimo_pasajeros(self, minimo_pasajeros):
+        self.__minimo_pasajeros = minimo_pasajeros
+        
+class VueloInternacional(Vuelo):
+    def __init__(self,  numero, hora_salida, hora_llegada, pais_destino, codigo, nombre, precio_boleto, porcentajeImpuesto):
+        super().__init__( numero, hora_salida, hora_llegada)
+        self.__pais_destino = pais_destino
+        self.__pasajero = PasajeroFrecuente(codigo, nombre, precio_boleto, porcentajeImpuesto)
+        
+    @property
+    def pais_destino(self):
+        return self.__pais_destino
+    @pais_destino.setter
+    def pais_destinos(self, pais_destino):
+        self.__pais_destino = pais_destino
+        
+class VueloCarga(Vuelo):
+    def __init__(self,  numero, hora_salida, hora_llegada, pais_destino):
+        super().__init__( numero, hora_salida, hora_llegada)
+        self.__pais_destino = pais_destino
+        
+    @property
+    def pais_destino(self):
+        return self.__pais_destino
+    @pais_destino.setter
+    def pais_destinos(self, pais_destino):
+        self.__pais_destino = pais_destino
+
+# Creamos los pasajeros
+        
+pasajero = Pasajero(1, "Andrey Arguedas", 4000, 0.13)
+pasajeroFrecuente = PasajeroFrecuente(2, "Adriana Morales", 4000, 0.13)
+
+print("El total a pagar del pasajero no frecuente es: ", pasajero.total_pagar())
+print("El total a pagar del pasajero frecuente es: ", pasajeroFrecuente.total_pagar())
+
+# Enviamos a los pasajeros a vuelos
+
+vueloLocal = VueloLocal(1, "17:00", "21:00", 15, pasajeroFrecuente.codigo, pasajeroFrecuente.nombre, pasajeroFrecuente.precio_boleto, pasajeroFrecuente.porcentajeImpuesto)
+vueloInternacional = VueloInternacional(1, "17:00", "21:00", "Costa Rica", pasajero.codigo, pasajero.nombre, pasajero.precio_boleto, pasajero.porcentajeImpuesto)
+
