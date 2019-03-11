@@ -262,3 +262,80 @@ print("El total a pagar del pasajero frecuente es: ", pasajeroFrecuente.total_pa
 vueloLocal = VueloLocal(1, "17:00", "21:00", 15, pasajeroFrecuente.codigo, pasajeroFrecuente.nombre, pasajeroFrecuente.precio_boleto, pasajeroFrecuente.porcentajeImpuesto)
 vueloInternacional = VueloInternacional(1, "17:00", "21:00", "Costa Rica", pasajero.codigo, pasajero.nombre, pasajero.precio_boleto, pasajero.porcentajeImpuesto)
 
+"""
+4. Agregue a la clase class mi DF() vista en clase los siguientes m´etodos:
+Retorna la cantidad de entradas de este DataFrame que son divisibles entre 3 (Pruebe
+este m´etodo leyendo un archivo de datos, esto en el Script de pruebas).
+"""
+
+import pandas as pd
+import numpy as np
+class mi_DF():
+    def __init__(self, DF = pd.DataFrame()):
+        self.__num_filas = DF.shape[0]
+        self.__num_columnas = DF.shape[1]
+        self.__DF = DF
+    @property
+    def num_filas(self):
+        return self.__num_filas
+    @property
+    def num_columnas(self):
+        return self.__num_columnas
+    @property
+    def DF(self):
+        return self.__DF  
+    def maximo(self):
+        max = self.DF.iloc[0,0]
+        for i in range(self.num_filas):
+            for j in range(self.num_columnas):
+                if self.DF.iloc[i,j] > max:
+                    max = self.DF.iloc[i,j]
+        return max
+    def valores(self):
+        min = self.DF.iloc[0,0]
+        max = self.DF.iloc[0,0]
+        total_ceros = 0
+        total_pares = 0
+        for i in range(self.num_filas):
+            for j in range(self.num_columnas):
+                if self.DF.iloc[i,j] > max:
+                    max = self.DF.iloc[i,j]
+                if self.DF.iloc[i,j] < min:
+                    min = self.DF.iloc[i,j]
+                if self.DF.iloc[i,j] == 0:
+                    total_ceros = total_ceros+1
+                if self.DF.iloc[i,j] % 2 == 0:
+                    total_pares = total_pares+1
+        return {'Maximo' : max, 'Minimo' : min, 'Total_Ceros' : total_ceros, 'Pares' : total_pares}
+    def estadisticas(self,nc):
+        media = np.mean(self.DF.iloc[:,nc])
+        mediana = np.median(self.DF.iloc[:,nc])
+        deviacion = np.std(self.DF.iloc[:,nc])
+        varianza = np.var(self.DF.iloc[:,nc])
+        maximo = np.max(self.DF.iloc[:,nc])
+        minimo = np.min(self.DF.iloc[:,nc])
+        return {'Variable' : self.DF.columns.values[nc],
+                'Media' : media,
+                'Mediana' : mediana,
+                'DesEst' : deviacion,
+                'Varianza' : varianza,
+                'Maximo' : maximo,
+                'Minimo' : minimo}
+    def divisibles(self):
+        acum = 0
+        for i in range(self.num_filas):
+            for j in range(self.num_columnas):
+                if self.DF.iloc[i, j] % 3 == 0:
+                    acum += 1
+        return acum   
+
+
+import os
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
+
+datos_est = pd.read_csv('EjemploEstudiantes.csv',delimiter=';',decimal=",",index_col=0)
+datos = mi_DF(datos_est)
+
+print(datos.DF)
+
+print("Cantidad de divisibles entre 3: ", datos.divisibles())
