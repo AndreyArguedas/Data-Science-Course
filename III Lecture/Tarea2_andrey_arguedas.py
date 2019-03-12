@@ -327,7 +327,14 @@ class mi_DF():
             for j in range(self.num_columnas):
                 if self.DF.iloc[i, j] % 3 == 0:
                     acum += 1
-        return acum   
+        return acum
+    
+    def covarianza_correlacion(self, c1, c2):
+        covar = self.DF.iloc[:, c1].cov(self.DF.iloc[:, c2])
+        corre = self.DF.iloc[:, c1].corr(self.DF.iloc[:, c2])
+        c1name = self.DF.columns.values[c1]
+        c2name = self.DF.columns.values[c2]
+        return {"Columna 1" : c1name, "Columna 2" : c2name, "Covarianza" : covar, "Correlacion" : corre}
 
 
 import os
@@ -336,6 +343,42 @@ os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
 datos_est = pd.read_csv('EjemploEstudiantes.csv',delimiter=';',decimal=",",index_col=0)
 datos = mi_DF(datos_est)
 
-print(datos.DF)
 
 print("Cantidad de divisibles entre 3: ", datos.divisibles())
+
+"""
+Recibe dos n´umeros de columna y que retorna en una lista con el nombre de las variables
+correspondientes a las columnas, la covarianza y la correlaci´on entre esas dos variables
+(Pruebe este m´etodo leyendo un archivo de datos, esto en el Script de pruebas).
+"""
+
+import os
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
+
+datos_est = pd.read_csv('EjemploEstudiantes.csv',delimiter=';',decimal=",",index_col=0)
+datos = mi_DF(datos_est)
+
+print("Covarianza y correlacion de Matematicas y Ciencias: ", datos.covarianza_correlacion(0, 1))
+
+"""
+[Optativo 20 puntos] Reescriba la clase class mi DF() pero heredando de la clase
+pandas en lugar de tener una relaci´on componente-compuesto con pandas.
+
+"""
+
+"""
+5. Desarrolle una clase denominada Matriz que tiene como atributos una matriz tipo numpy, el
+n´umero de filas y el n´umero de columnas. Adem´as tiene m´etodos que calculan la suma total de
+la matriz, la suma de una fila dada (el n´umero de fila es un par´ametro del m´etodo), la suma
+de una columna dada (el n´umero de columna es un par´ametro del m´etodo), la suma de todas
+las entradas de la matriz en valor absoluto y a suma de todas las entradas de la matriz al
+cuadrado.
+"""
+
+import pandas as pd
+import numpy as np
+class Matriz():
+    def __init__(self, NP = np.matrix()):
+        self.__num_filas = NP.shape[0]
+        self.__num_columnas = NP.shape[1]
+        self.__matriz = NP
