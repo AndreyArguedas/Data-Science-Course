@@ -378,7 +378,29 @@ cuadrado.
 import pandas as pd
 import numpy as np
 class Matriz():
-    def __init__(self, NP = np.matrix()):
-        self.__num_filas = NP.shape[0]
-        self.__num_columnas = NP.shape[1]
-        self.__matriz = NP
+    def __init__(self, filas, columnas, matriz):
+        self.__num_filas = filas
+        self.__num_columnas = columnas
+        self.__matriz = matriz
+        
+    @property
+    def num_filas(self):
+        return self.__num_filas
+    @property
+    def num_columnas(self):
+        return self.__num_columnas
+    @property
+    def matriz(self):
+        return self.__matriz
+    
+    def sumaTotal(self):
+        acum = 0
+        for j in range(self.__num_filas):
+            for i in range(self.__num_columnas):
+                acum += self.__matriz[i, j]
+        return acum
+
+
+matriz = Matriz(2, 3, np.matrix([[1, 2, -5], [3, 4, 3]]))
+
+print("Covarianza y correlacion de Matematicas y Ciencias: ", matriz.sumaTotal())
