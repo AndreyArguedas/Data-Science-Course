@@ -1,19 +1,17 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Mar  9 16:07:07 2019
+#!/usr/bin/env python
+# coding: utf-8
 
-@author: Andrey
-"""
+# # Tarea 2
 
-"""
-1. Se supone que una Factura que tiene los siguientes atributos: nombre cliente,
-direccion cliente, monto total, porcentaje impuesto 
-y total pagar = monto total +
-porcentaje impuesto * monto total. 
-Programe una clase al estilo propio de Python que tenga los atributos citados arriba como privados 
-con sus respectivos m´etodos para obtener y
-modificar dichos atributos. Adem´as debe tener un m´etodo para calcular el total pagar.
-"""
+# ## Autor Andrey Arguedas Espinoza
+
+# ### Escriba en Python con las siguientes ejercicios con al menos una prueba de ejecución de cada clase.
+# 
+
+# ![image.png](attachment:image.png)
+
+# In[1]:
+
 
 class Factura(object):
     def __init__(self, nombre_cliente, direccion_cliente, monto_total, porcentaje_impuesto):
@@ -62,10 +60,10 @@ print("Porcentaje: ", factura1.porcentaje_impuesto)
 print("El total a pagar es de: ", factura1.total_pagar())
 
 
-"""
-2. Programe una clase en Python que tiene tres atributos (n´umeros) A, B, y C y m´etodos para
-retornar el menor, el mayor, la suma de los tres y suma cuadrados = A2 + B2 + C
-"""
+# ### 2. Programe una clase en Python que tiene tres atributos (números) A, B, y C y métodos para retornar el menor, el mayor, la suma de los tres y suma cuadrados = A2 + B2 + C2
+
+# In[2]:
+
 
 class Conjunto(object):
     def __init__(self, a, b, c):
@@ -109,26 +107,12 @@ print("El menor es: ", c1.menor())
 print("La suma de cuadrados: ", c1.suma_cuadrados())
 
 
-"""
-3. Una líınea a´erea desea implementar un sistema para el control de sus vuelos, para esto se cuenta
-con la siguiente informaci´on:
-    
-• Se supone que un Vuelo tiene los siguientes atributos: N´umero, Hora de Salida y Hora de
-Llegada.
+# ![Captura2.PNG](attachment:Captura2.PNG)
 
-• Un Vuelo Local (USA) tiene adem´as (respecto a un Vuelo) un N´umero M´ınimo de Pasajeros.
+# ![Captura3.PNG](attachment:Captura3.PNG)
 
-• Un Vuelo Internacional tiene adem´as (respecto a un Vuelo) un Pa´ıs Destino.
+# In[1]:
 
-• Un Vuelo de Carga tiene adem´as (respecto a un Vuelo) un Peso M´aximo de carga soportado.
-
-• Un Pasajero tiene C´odigo, Nombre, Precio Boleto, Porcentaje Impuesto y Total a Pagar
-= Precio Boleto + Porcentaje Impuesto * Precio Boleto. Los pasajeros son de dos tipos:
-los Pasajero Frecuente y los No Frecuentes, la diferencia es que a los pasajeros frecuentes
-se les aplica un 20 % de descuento en el Total a Pagar.
-
-• La clase Vuelo Local incluye un atributo tipo Pasajero F
-"""
 
 class Pasajero(object):
     def __init__(self, codigo, nombre, precio_boleto, porcentajeImpuesto):
@@ -262,11 +246,13 @@ print("El total a pagar del pasajero frecuente es: ", pasajeroFrecuente.total_pa
 vueloLocal = VueloLocal(1, "17:00", "21:00", 15, pasajeroFrecuente.codigo, pasajeroFrecuente.nombre, pasajeroFrecuente.precio_boleto, pasajeroFrecuente.porcentajeImpuesto)
 vueloInternacional = VueloInternacional(1, "17:00", "21:00", "Costa Rica", pasajero.codigo, pasajero.nombre, pasajero.precio_boleto, pasajero.porcentajeImpuesto)
 
-"""
-4. Agregue a la clase class mi DF() vista en clase los siguientes m´etodos:
-Retorna la cantidad de entradas de este DataFrame que son divisibles entre 3 (Pruebe
-este m´etodo leyendo un archivo de datos, esto en el Script de pruebas).
-"""
+
+# ### 4. Agregue a la clase class mi DF() vista en clase los siguientes métodos:
+
+# ### • Retorna la cantidad de entradas de este DataFrame que son divisibles entre 3 (Pruebe este método leyendo un archivo de datos, esto en el Script de pruebas).
+
+# In[1]:
+
 
 import pandas as pd
 import numpy as np
@@ -337,20 +323,28 @@ class mi_DF():
         return {"Columna 1" : c1name, "Columna 2" : c2name, "Covarianza" : covar, "Correlacion" : corre}
 
 
+# In[2]:
+
+
 import os
 os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
 
 datos_est = pd.read_csv('EjemploEstudiantes.csv',delimiter=';',decimal=",",index_col=0)
 datos = mi_DF(datos_est)
 
+print(datos.DF)
+
+
+# In[3]:
+
 
 print("Cantidad de divisibles entre 3: ", datos.divisibles())
 
-"""
-Recibe dos n´umeros de columna y que retorna en una lista con el nombre de las variables
-correspondientes a las columnas, la covarianza y la correlaci´on entre esas dos variables
-(Pruebe este m´etodo leyendo un archivo de datos, esto en el Script de pruebas).
-"""
+
+# ![Captura4.PNG](attachment:Captura4.PNG)
+
+# In[4]:
+
 
 import os
 os.chdir("/Users/Andrey/Desktop/Data-Science-Course/II Lecture/Data")
@@ -360,11 +354,11 @@ datos = mi_DF(datos_est)
 
 print("Covarianza y correlacion de Matematicas y Ciencias: ", datos.covarianza_correlacion(0, 1))
 
-"""
-[Optativo 20 puntos] Reescriba la clase class mi DF() pero heredando de la clase
-pandas en lugar de tener una relaci´on componente-compuesto con pandas.
 
-"""
+# ![optativa.PNG](attachment:optativa.PNG)
+
+# In[2]:
+
 
 import pandas as pd
 import numpy as np
@@ -423,14 +417,11 @@ print("El máximo de la df que hereda de pandas es: ", datos.maximo())
 print("Los valores que hereda de pandas es: ", datos.valores())
 print("Las estadisticas son: ", datos.estadisticas(1))
 
-"""
-5. Desarrolle una clase denominada Matriz que tiene como atributos una matriz tipo numpy, el
-n´umero de filas y el n´umero de columnas. Adem´as tiene m´etodos que calculan la suma total de
-la matriz, la suma de una fila dada (el n´umero de fila es un par´ametro del m´etodo), la suma
-de una columna dada (el n´umero de columna es un par´ametro del m´etodo), la suma de todas
-las entradas de la matriz en valor absoluto y a suma de todas las entradas de la matriz al
-cuadrado.
-"""
+
+# ![Captura5.PNG](attachment:Captura5.PNG)
+
+# In[1]:
+
 
 import pandas as pd
 import numpy as np
@@ -494,3 +485,4 @@ print("Suma columna: ", matriz.sumaColumna(1))
 print("Suma absolutos: ", matriz.sumaAbs())
 
 print("Suma cuadrados: ", matriz.sumaCuadrados())
+
