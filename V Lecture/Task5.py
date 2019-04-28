@@ -118,3 +118,108 @@ print("TABLA CRUZADA - Supervivencia por genero:")
 
 survived_pclass = pd.crosstab(index=datos["Survived"], columns=datos["Sex"])
 print(survived_pclass)
+
+
+#1.d
+
+import matplotlib.pyplot as plt
+
+print("SURVIVED")
+
+survived = pd.crosstab(index=datos["Survived"], columns="count") 
+
+alto = [survived['count'][0], survived['count'][1]]
+barras = ('NO', 'YES')
+y_pos = np.arange(len(barras))
+plt.bar(y_pos, alto, color=['red','blue'])
+plt.xticks(y_pos, barras)
+
+print("******************************\n")
+
+print("CLASS")
+
+pclass = pd.crosstab(index=datos["Pclass"], columns="count") 
+
+alto = [pclass['count'][0], pclass['count'][1], pclass['count'][2]]
+barras = ('FIRST', 'SECOND', 'THIRD')
+y_pos = np.arange(len(barras))
+plt.bar(y_pos, alto, color=['red','blue', 'yellow'])
+plt.xticks(y_pos, barras)
+
+# 1.e
+
+datos.head()
+boxplots = datos.boxplot(return_type='axes')
+
+#1.f
+
+print("Graficos funcion de densidad para hermanos o conyugues")
+
+densidad = datos["SibSp"].plot(kind='density')
+
+
+print("Graficos funcion de densidad para hijos o padres")
+
+densidad = datos["Parch"].plot(kind='density')
+
+
+print("Histogramas para hermanos o conyugues")
+
+densidad = datos["SibSp"].plot(kind='hist')
+
+print("Histogramas para hijos o padres")
+
+densidad = datos["Parch"].plot(kind='hist')
+
+import scipy.stats
+
+"""
+Para pruebas de normalidad siempre se plantean así las hipótesis.
+
+Hipótesis:
+
+H0: La muestra proviene de una distribución normal.
+
+H1: La muestra no proviene de una distribución normal.
+
+Nivel de Significancia: El nivel de significancia que se trabajará es de 0.05. Alpha=0.05
+
+Criterio de Decisión
+
+Si P < Alpha Se rechaza H0
+
+Si p >= Alpha No se rechaza H0, es decir, los datos SÍ siguen la normal
+"""
+
+shapiro_resultados = scipy.stats.shapiro(datos.iloc[:,6:7])
+print(shapiro_resultados)
+
+p_value = shapiro_resultados[1]
+print(p_value)
+
+alpha = 0.05
+if p_value > alpha:
+    print('Sí sigue la curva Normal (No se rechaza H0)')
+else:
+    print('No sigue la curva Normal (Se rechaza H0)')
+    
+# 1.g
+    
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.pairplot(datos, hue='SibSp', size=2.5)
+
+x = datos.iloc[:]["SibSp"]
+y = datos.iloc[:]["Parch"]
+plt.plot(x, y, 'o', color='black')
+
+#1.h
+
+corr = datos.corr()
+print("Matriz de correlaciones \n")
+print(corr)
+
+f, ax = plt.subplots(figsize=(10, 8))
+sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool), cmap=sns.diverging_palette(220, 10, as_cmap=True),
+            square=True, ax=ax)
