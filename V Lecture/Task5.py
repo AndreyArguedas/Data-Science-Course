@@ -590,8 +590,19 @@ resto del istmo
 acp.plot_plano_principal(ejes = [0, 1])
 acp.plot_circulo()
 
+"""
+Durante los años 84 y 85 Honduras, Guatemala y El Salvador importaron más,
+sin embargo durante los años desde 1981 hasta 1983 Panama, Nicaragua y Costa Rica
+realizaron mayor importacion, en el segmento de 1979-1980 todos los paises importaron muy poco
+"""
+
 #3.b
 acp.plot_plano_principal(ejes = [0, 2])
 
 acp.plot_circulo()
 
+"""
+Para los años 87 y 88 observamos que Costa Rica fue el mayor importador 
+y los paises del triangulo norte (Honduras, Guatemala, El Salvador)
+empezaron a importar cada vez menos
+"""
