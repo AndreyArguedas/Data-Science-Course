@@ -647,3 +647,36 @@ de tipo A comienza a crecer un poco más.
 
 acp.plot_plano_principal(ejes = [0, 1])
 acp.plot_circulo()
+
+
+
+#4.b
+import os
+import pandas as pd
+import numpy as np
+
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/V Lecture")
+
+pd.set_option('display.max_rows', 1000)
+
+datos = pd.read_csv('SAheart.csv',delimiter=';',decimal=".",index_col=0)
+print(datos)
+
+def recodificar(col, nuevo_codigo):
+  col_cod = pd.Series(col, copy=True)
+  for llave, valor in nuevo_codigo.items():
+    col_cod.replace(llave, valor, inplace=True)
+  return col_cod
+
+datos["famhist"] = recodificar(datos["famhist"], {'Absent':0,'Present':1})
+datos["chd"] = recodificar(datos["chd"], {'No':0,'Si':1})
+
+print(datos)
+
+acp = ACP(datos,n_componentes=3)
+acp.plot_circulo()
+
+
+
+acp.plot_plano_principal(ejes = [0, 1])
+acp.plot_circulo()
