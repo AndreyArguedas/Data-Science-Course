@@ -606,3 +606,44 @@ Para los años 87 y 88 observamos que Costa Rica fue el mayor importador
 y los paises del triangulo norte (Honduras, Guatemala, El Salvador)
 empezaron a importar cada vez menos
 """
+
+#Ejercicio 4
+
+
+import os
+import pandas as pd
+import numpy as np
+
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/V Lecture")
+
+pd.set_option('display.max_rows', 1000)
+
+datos = pd.read_csv('SAheart.csv',delimiter=';',decimal=".",index_col=0)
+print(datos)
+
+#4.a.1
+del datos['famhist']
+del datos['chd']
+
+acp = ACP(datos,n_componentes=3)
+acp.plot_plano_principal()
+
+
+
+#4.2
+
+acp.plot_circulo()
+
+"""
+Encontramos relacion positiva entre la obesidad y la baja densidad de lipoprotein cholesterol(ldl)
+lo que quiere decir que el alcholismo puede estar provocando que baje el ldl.
+
+Encontramos relaciones negativas del typeA con variables como alcohol, tabaco y la edad
+esto quiere decir que entre las personas mas toman, alcohol, fuman o envejecen el comportamiento
+de tipo A comienza a crecer un poco más.
+"""
+
+#4.3
+
+acp.plot_plano_principal(ejes = [0, 1])
+acp.plot_circulo()
