@@ -215,5 +215,49 @@ pd.set_option('display.max_rows', 1000)
 datos = pd.read_csv('SAheart.csv',delimiter=';',decimal=".",index_col=0)
 print(datos)
 
-datos["famhist"] = recodificar(datos["Conducta"], {1:'Mala',2:'Regular',3:'Buena'})
+datos["famhist"] = recodificar(datos["famhist"], {"Present": 1,"Absent": 0})
+datos["chd"] = recodificar(datos["chd"], {"Si": 1,"No": 0})
 print(datos.head())
+
+
+datos_dummy = pd.get_dummies(datos)
+print(datos_dummy.head())
+
+
+grupos = fcluster(linkage(pdist(datos_dummy), method = 'ward', metric='binary'), 3, criterion = 'maxclust')
+grupos = grupos-1 # Se resta 1 para que los clústeres se enumeren de 0 a (K-1), como usualmente lo hace Python
+# El siguiente print es para ver en qué cluster quedó cada individuo
+print(grupos)
+
+centros = np.array(pd.concat([centroide(0, datos_dummy, grupos), 
+                              centroide(1, datos_dummy, grupos),
+                              centroide(2, datos_dummy, grupos)]))
+print(centros)
+
+plt.figure(1, figsize = (12, 8))
+bar_plot(centros, datos_dummy.columns)
+open_close_plot()
+
+
+plt.figure(1, figsize = (10, 10))
+radar_plot(centros, datos_dummy.columns)
+open_close_plot()
+
+#Usando Kmeans
+
+kmedias = KMeans(n_clusters=3)
+kmedias.fit(datos_dummy)
+print(kmedias.predict(datos_dummy))
+
+
+centros = np.array(kmedias.cluster_centers_)
+print(centros) 
+
+
+plt.figure(1, figsize = (12, 8))
+bar_plot(centros, datos_dummy.columns)
+open_close_plot()
+
+plt.figure(1, figsize = (10, 10))
+radar_plot(centros, datos_dummy.columns)
+open_close_plot()
