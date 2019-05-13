@@ -85,3 +85,9 @@ def graficar_cortes(lim1, lim2):
 def centroide(num_cluster, datos, clusters):
     ind = clusters == num_cluster
     return(pd.DataFrame(datos[ind].mean()).T)
+    
+def recodificar(col, nuevo_codigo):
+  col_cod = pd.Series(col, copy=True)
+  for llave, valor in nuevo_codigo.items():
+    col_cod.replace(llave, valor, inplace=True)
+  return col_cod

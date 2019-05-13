@@ -110,3 +110,110 @@ open_close_plot()
 kmedias = KMeans(n_clusters=3)
 kmedias.fit(datos)
 print(kmedias.predict(datos))
+
+centros = np.array(kmedias.cluster_centers_)
+print(centros) 
+
+
+plt.figure(1, figsize = (12, 8))
+bar_plot(centros, datos.columns)
+open_close_plot()
+
+plt.figure(1, figsize = (10, 10))
+radar_plot(centros, datos.columns)
+open_close_plot()
+
+
+
+#Ejercicio 2
+
+import os
+import pandas as pd
+
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VI Lecture")
+
+pd.set_option('display.max_rows', 1000)
+
+datos = pd.read_csv('SAheart.csv',delimiter=';',decimal=".",index_col=0)
+print(datos)
+
+#2.b
+
+del datos['famhist']
+del datos['chd']
+
+ward_res = ward(datos)         #Ward
+single_res = single(datos)     #Salto mínimo
+complete_res = complete(datos) #Salto Máximo
+average_res = average(datos)   #Promedio
+
+print("=================================\n")
+print("==============WARD===============\n")
+print(ward_res)
+
+print("=========================================\n")
+print("==============SALTO MINIMO===============\n")
+print(single_res)
+
+print("=========================================\n")
+print("==============SALTO MAXIMO===============\n")
+print(complete_res)
+
+print("=========================================\n")
+print("================PROMEDIO=================\n")
+print(average_res)
+
+print("=========================================\n")
+print("================PROMEDIO=================\n")
+
+dendrogram(average_res,labels= datos.index.tolist())
+
+graficar_cortes(55, 45)
+
+print("=========================================\n")
+print("==============SALTO MAXIMO===============\n")
+
+dendrogram(complete_res,labels= datos.index.tolist())
+
+graficar_cortes(125, 100)
+
+print("=================================\n")
+print("==============WARD===============\n")
+
+dendrogram(ward_res,labels= datos.index.tolist())
+
+graficar_cortes(500, 350)
+
+#2.c
+
+kmedias = KMeans(n_clusters=3)
+kmedias.fit(datos)
+print(kmedias.predict(datos))
+
+
+centros = np.array(kmedias.cluster_centers_)
+print(centros) 
+
+
+plt.figure(1, figsize = (12, 8))
+bar_plot(centros, datos.columns)
+open_close_plot()
+
+plt.figure(1, figsize = (10, 10))
+radar_plot(centros, datos.columns)
+open_close_plot()
+
+#2f
+
+import os
+import pandas as pd
+
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VI Lecture")
+
+pd.set_option('display.max_rows', 1000)
+
+datos = pd.read_csv('SAheart.csv',delimiter=';',decimal=".",index_col=0)
+print(datos)
+
+datos["famhist"] = recodificar(datos["Conducta"], {1:'Mala',2:'Regular',3:'Buena'})
+print(datos.head())
