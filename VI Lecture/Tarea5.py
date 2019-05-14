@@ -261,3 +261,60 @@ open_close_plot()
 plt.figure(1, figsize = (10, 10))
 radar_plot(centros, datos_dummy.columns)
 open_close_plot()
+
+
+
+#Ejercicio 3
+
+import os
+import pandas as pd
+import numpy as np
+
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VI Lecture")
+
+pd.set_option('display.max_rows', 1000)
+
+datos = pd.read_csv('DatosBeijing.csv',delimiter=',',decimal=".",index_col=0)
+
+print(datos.dropna().describe())
+
+print(datos.shape)
+
+#3.b
+
+datos = datos.replace(to_replace='NA', value=np.nan).dropna()
+
+print(datos.shape)
+
+
+#3.c
+
+del datos['DireccionViento']
+
+print(datos.shape)
+
+print(datos.head())
+
+""" 
+Se debe eliminar ya que es una variable cualitativa y no calzaría en los
+metodos a utilizar (K-means y Clusting Jerarquico). La alternativa sería recodificar
+
+"""
+
+#3.d
+
+# Si se ejecuta clustring jerarquico el compilador "crasheara" debido a que son
+# muchos datos para utilizar este metodo
+
+
+#3.e
+
+kmeans = KMeans(n_clusters=3,n_init=10,max_iter=500)
+
+kmeans.fit(datos)
+
+print(kmeans.predict(datos))
+
+
+centros = np.array(kmeans.cluster_centers_)
+print(centros) 
