@@ -318,3 +318,82 @@ print(kmeans.predict(datos))
 
 centros = np.array(kmeans.cluster_centers_)
 print(centros) 
+
+#3f
+
+plt.figure(1, figsize = (12, 8))
+bar_plot(centros, datos.columns)
+open_close_plot()
+
+
+#3g
+
+Nc = range(1, 20)
+kmediasList = [KMeans(n_clusters=i) for i in Nc]
+varianza = [kmediasList[i].fit(datos).inertia_ for i in range(len(kmediasList))]
+plt.plot(Nc,varianza,'o-')
+plt.xlabel('Número de clústeres')
+plt.ylabel('Varianza explicada por cada cluster (Inercia Intraclases)')
+plt.title('Codo de Jambu')
+plt.show()
+
+## El codo de jambu sugiere 3 clusteres
+
+
+
+#Ejercicio 4
+from abc import  ABCMeta, abstractmethod
+# Clase Abstracta, ABC Class
+class Base(metaclass = ABCMeta):    
+    @abstractmethod
+    def __str__(self):
+        pass    
+
+
+class Exploratorio(Base):
+    def __init__(self, df = pd.DataFrame()):
+        self.__df = df
+        
+    @property
+    def df(self):
+        return self.__df 
+    @df.setter
+    def df(self, df):
+        self.__df  = df
+    
+    def __str__(self):
+        return str(self.df)
+    
+    def analisis(self):
+        print("---------------HEAD------------------")
+        print(self.df.head())
+        print("---------------SIZE------------------")
+        print(self.df.shape)
+        print("---------------DESCRIBE---------------")
+        print(self.df.describe())
+        print("---------------PERCENTIL---------------")
+        print(datos.quantile(np.array([0,.25,.50,.75,1])))
+        print("---------------BOX PLOT---------------")
+        boxplots = datos.boxplot(return_type='axes')
+        open_close_plot()
+        print("---------------DENSIDAD---------------")
+        densidad = datos[datos.columns[:10]].plot(kind='density')
+        open_close_plot()
+        print("---------------HISTOGRAMA---------------")
+        densidad = datos[datos.columns[:10]].plot(kind='hist')
+        open_close_plot()
+        
+#Test
+        
+import os
+import pandas as pd
+
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VI Lecture")
+
+pd.set_option('display.max_rows', 1000)
+
+datos = pd.read_csv('SAheart.csv',delimiter=';',decimal=".",index_col=0)
+        
+exp = Exploratorio(datos.loc[:, ~datos.columns.isin(['famhist', 'chd'])])
+
+exp.analisis()

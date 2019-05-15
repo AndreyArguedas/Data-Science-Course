@@ -15,6 +15,7 @@ from   sklearn.cluster import KMeans
 # Import the dendrogram function and the ward, single, complete, average, linkage and fcluster clustering function from SciPy
 from scipy.cluster.hierarchy import dendrogram, ward, single, complete,average,linkage, fcluster
 from scipy.spatial.distance import pdist
+import scipy.stats
 import pandas as pd
 
 def open_close_plot():
