@@ -376,6 +376,8 @@ metodos a utilizar (K-means y Clusting Jerarquico). La alternativa sería recodi
 
 #3.e
 
+del datos['Anno']
+
 kmeans = KMeans(n_clusters=3,n_init=10,max_iter=500)
 
 kmeans.fit(datos)
@@ -392,6 +394,10 @@ plt.figure(1, figsize = (12, 8))
 bar_plot(centros, datos.columns)
 open_close_plot()
 
+"""
+Podemos observar como cuando la velocidad del viento sube la
+concentracion Particula disminuye
+"""
 
 #3g
 
@@ -449,18 +455,66 @@ class Exploratorio(Base):
         print("---------------HISTOGRAMA---------------")
         densidad = datos[datos.columns[:10]].plot(kind='hist')
         open_close_plot()
-
-class ACP(Exploratorio):
-    
-    def __init__(self, df = pd.DataFrame()):
-        super().__init__(df)
         
+class Clusters(Exploratorio):
+    def __init__(self, df = pd.DataFrame(), n_clusters = 1):
+        super().__init__(df)
+        self.__n_clusters = n_clusters
+        
+    @property
+    def n_clusters(self):
+        return self.__n_clusters 
+    @n_clusters.setter
+    def n_clusters(self, n_clusters):
+        self.__n_clusters  = n_clusters
+    
     def __str__(self):
         return super().__str__()
     
     def analisis(self):
         super().analisis()
-        print("---------------HEAD------------------")
+        
+    def graficar_barras(self, array):
+        plt.figure(1, figsize = (12, 8))
+        bar_plot(array, self.df.columns)
+        open_close_plot()
+    
+    def graficar_radar(self, array):
+        plt.figure(1, figsize = (12, 8))
+        radar_plot(array, self.df.columns)
+        open_close_plot()
+        
+class Jerarquico(Clusters):
+    def __init__(self, df = pd.DataFrame(), n_clusters = 1):
+        super().__init__(df, n_clusters)
+    
+    def __str__(self):
+        return super().__str__()
+    
+    def analisis(self):
+        grupos = fcluster(linkage(pdist(self.df), method = 'ward', metric='euclidean'), 3, criterion = 'maxclust')
+        grupos = grupos-1 # Se resta 1 para que los clústeres se enumeren de 0 a (K-1), como usualmente lo hace Python
+        arrays = []
+        for i in range(0, self.n_clusters):
+            arrays.append(centroide(i, datos, grupos))
+        centros = np.array(pd.concat(arrays))
+        super().graficar_barras(centros)
+        super().graficar_radar(centros)
+        
+class Kmeans(Clusters):
+    def __init__(self, df = pd.DataFrame(), n_clusters = 1):
+        super().__init__(df, n_clusters)
+    
+    def __str__(self):
+        return super().__str__()
+    
+    def analisis(self):
+        kmedias = KMeans(self.n_clusters)
+        kmedias.fit(self.df)
+        centros = np.array(kmedias.cluster_centers_)
+        super().graficar_barras(centros)
+        super().graficar_radar(centros)
+        
 
     
 #Test
@@ -476,4 +530,19 @@ datos = pd.read_csv('SAheart.csv',delimiter=';',decimal=".",index_col=0)
         
 exp = Exploratorio(datos.loc[:, ~datos.columns.isin(['famhist', 'chd'])])
 
+print("==========EXPLORATORIO==========")
+
 exp.analisis()
+
+
+print("==========JERARQUICO==========")
+
+jer = Jerarquico(datos.loc[:, ~datos.columns.isin(['famhist', 'chd'])], 3)
+
+jer.analisis()
+
+print("==========K-MEANS==========")
+
+km = Kmeans(datos.loc[:, ~datos.columns.isin(['famhist', 'chd'])], 3)
+
+km.analisis()
