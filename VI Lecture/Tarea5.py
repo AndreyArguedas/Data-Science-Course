@@ -119,11 +119,35 @@ plt.figure(1, figsize = (12, 8))
 bar_plot(centros, datos.columns)
 open_close_plot()
 
+
+"""
+En el primer cluster observamos como la mayoría de paises durante ese tiempo
+importaron poco producto, Panama, El Salvador y CR importan niveles similares
+mientras que Nicaragua y Honduras lo hacen en menor cantidad.
+
+En el segundo cluster vemos como Panama, Guatemala y El Salvador comenzaron
+a importar mucho más, todos los paises en general crecieron las importaciones
+excepto CR.
+
+En el tercer cluster vemos como los paises del triangulo norte (Guatemala
+Honduras, El Salvador) bajaron sus importaciones mientras que la parte sur
+de CentroAmerica (Costa Rica, Nicaragua, Panama), crecieron sus importaciones
+"""
+
 plt.figure(1, figsize = (10, 10))
 radar_plot(centros, datos.columns)
 open_close_plot()
 
+"""
+En el grafico de radar podemos observar como los paises vecinos tienden
+a tomar decisiones de importaciones similares a sus vecinos, ejemplo, el cluster 2
+nos muestra que en un mismo periodo de tiempo Nicaragua,Panama y CR importaron mas,
+mientras que en el cluster 1 vemos lo mismo para los paises de la zona norte
+de centroamerica.
 
+En el cluster 0 vemos como todos los paises tomaban decisiones similares e
+importaban muy poco de Mexico.
+"""
 
 #Ejercicio 2
 
@@ -185,6 +209,49 @@ dendrogram(ward_res,labels= datos.index.tolist())
 graficar_cortes(500, 350)
 
 #2.c
+
+grupos = fcluster(linkage(pdist(datos), method = 'ward', metric='binary'), 3, criterion = 'maxclust')
+grupos = grupos-1 # Se resta 1 para que los clústeres se enumeren de 0 a (K-1), como usualmente lo hace Python
+# El siguiente print es para ver en qué cluster quedó cada individuo
+print(grupos)
+
+
+centros = np.array(pd.concat([centroide(0, datos, grupos), 
+                              centroide(1, datos, grupos),
+                              centroide(2, datos, grupos)]))
+print(centros)
+
+plt.figure(1, figsize = (12, 8))
+bar_plot(centros, datos.columns)
+open_close_plot()
+
+"""
+En el cluster 0 podemos observar los altos niveles de alcohol, podemos ademas ver
+el alto porcentaje del comportamiento de tipo A y la adiposity, podemos ver que la
+obesidad es similar a los demas clusters y el consumo de tabaco esta presente.
+
+En el cluster 1 podemos observar que el grupo es de menor de edad, consumen
+menos alcohol y practicamente no consumen tabaco, los demas indicadores se encuentran
+muy similar a los demas clusters
+
+En el cluster 2 vemos indicadores muy promedio pero con poco consumo de alcohol
+
+Como conclusion podemos ver que a pesar de la edad y bajos consumos de alcohol
+y tabaco los indicadores de obesidad, typeA, adiposity y ldl se encuentran similar
+entre grupos
+"""
+
+plt.figure(1, figsize = (10, 10))
+radar_plot(centros, datos.columns)
+open_close_plot()
+
+"""
+Podemos ver como a mayor edad tambien hay mayor consumo de tabaco y alcohol,
+ademas vemos una relacion entre el ldl y adiposity, encontramos relaciones negativas
+entre el consumo de tabaco y la obesidad asi como el comportamiento type A y la edad
+"""   
+
+#2.d
 
 kmedias = KMeans(n_clusters=3)
 kmedias.fit(datos)
@@ -382,7 +449,20 @@ class Exploratorio(Base):
         print("---------------HISTOGRAMA---------------")
         densidad = datos[datos.columns[:10]].plot(kind='hist')
         open_close_plot()
+
+class ACP(Exploratorio):
+    
+    def __init__(self, df = pd.DataFrame()):
+        super().__init__(df)
         
+    def __str__(self):
+        return super().__str__()
+    
+    def analisis(self):
+        super().analisis()
+        print("---------------HEAD------------------")
+
+    
 #Test
         
 import os
