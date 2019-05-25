@@ -118,12 +118,23 @@ indices = indices_general(MC,list(np.unique(y)))
 for k in indices:
     print("\n%s:\n%s"%(k,str(indices[k])))
     
-#Extrayendo data
+#Extrayendo precisiones
+
+def precisiones(MC):
+    VN = MC[0][0]
+    FP = MC[0][1]
+    FN = MC[1][0]
+    VP = MC[1][1]
     
-print(MC)
+    return {"Precision Global": (VN + VP) / (VN + FP + FN + VP), 
+            "Precisión Positiva": VP / (FN + VP), 
+            "Precisión Negativa": VN / (VN + FP), 
+            "Precisión Falsos Positivos": FP / (VN + FP),
+            "Precisión Falsos Negativos": FN / (VP + FN),
+            "Asertividad Positiva": VP / (FP + VP),
+            "Asertividad Negativa": VN / (FN + VN)}
+p = precisiones(MC)
 
-VN = MC[0][0]
-FP = MC[0][1]
-
-print(VN)
-print(FP)
+for k in p:
+    print("\n%s:\n%s"%(k,str(p[k])))
+    
