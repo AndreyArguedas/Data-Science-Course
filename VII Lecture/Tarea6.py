@@ -208,6 +208,7 @@ from   sklearn.datasets import make_blobs
 # Import the dendrogram function and the ward, single, complete, average, linkage and fcluster clustering function from SciPy
 from scipy.cluster.hierarchy import dendrogram, ward, single, complete,average,linkage, fcluster
 from scipy.spatial.distance import pdist
+from sklearn.utils.multiclass import unique_labels
     
 os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VII Lecture")
 
@@ -234,7 +235,7 @@ def plot_image(valor_cara, titulo = None, filas = 62, cols = 42):
     if titulo is not None:
         plt.title(titulo)
         
-plot_image(datos_caras.iloc[0, range(2913)], datos_caras.iloc[0, range(2913)])
+plot_image(datos_caras.iloc[0, range(2914)], datos_caras.iloc[0, range(2914)])
 
        
 
@@ -247,6 +248,10 @@ for i in range(1, 9):
 #C.1
     
 #Debemos remover la columna de Nombres
+    
+predecir_col = datos_caras.iloc[:,2913:2914]
+
+print(predecir_col.head())
 
 datos_caras = datos_caras.iloc[:,:2913]
 
@@ -259,15 +264,128 @@ print(grupos)
 
 ward_res = ward(datos_caras)
 
-centros = np.array(pd.concat([centroide(0, datos, grupos), 
-                              centroide(1, datos, grupos),
-                              centroide(2, datos, grupos)]))
-print(centros)   
-
 dendrogram(ward_res,labels= datos_caras.index.tolist())
 open_close_plot()
 
 #C.2
 
+# Primero sacar k
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=0)
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VII Lecture")
+
+pd.set_option('display.max_rows', 1000)
+
+datos_caras = pd.read_csv('8carasFamosas.csv',delimiter=';',decimal=".",index_col=0)
+
+predecir_col = datos_caras.iloc[:,2913:2914]
+
+print(predecir_col.head())
+
+X = datos_caras.iloc[:,:2913]
+
+X_train, X_test, y_train, y_test = train_test_split(X, predecir_col, train_size=0.8, random_state=0)
+
+print("========Tabla de entrenamiento========")
+
+print(X_train.head())
+
+print("========Tabla de test========")
+
+print(X_test.head())
+
+print("========Tabla de entrenamiento a predecir========")
+
+print(y_train.head())
+
+
+print("========Tabla de test a predecir========")
+
+print(y_test.head())
+
+#C.3
+
+cantidad = X_train.shape[0]
+
+k = math.sqrt(cantidad)
+
+k = math.trunc(k)
+
+print(k)
+
+print("---------------AUTO-----------------")
+
+instancia_knn_auto = KNeighborsClassifier(n_neighbors=k,algorithm='auto')
+
+instancia_knn_auto.fit(X_train,y_train)
+
+print("Las predicciones en Testing son: {}".format(instancia_knn_auto.predict(X_test)))
+
+print("Precisión en Testing: {:.2f}".format(instancia_knn_auto.score(X_test, y_test)))
+
+print("---------------BALL TREE-----------------")
+
+instancia_knn_ball_tree = KNeighborsClassifier(n_neighbors=k,algorithm='ball_tree')
+
+instancia_knn_ball_tree.fit(X_train,y_train)
+
+print("Las predicciones en Testing son: {}".format(instancia_knn_ball_tree.predict(X_test)))
+
+print("Precisión en Testing: {:.2f}".format(instancia_knn_ball_tree.score(X_test, y_test)))
+
+
+print("---------------KD TREE-----------------")
+
+instancia_knn_kd_tree = KNeighborsClassifier(n_neighbors=k,algorithm='kd_tree')
+
+instancia_knn_kd_tree.fit(X_train,y_train)
+
+print("Las predicciones en Testing son: {}".format(instancia_knn_kd_tree.predict(X_test)))
+
+print("Precisión en Testing: {:.2f}".format(instancia_knn_kd_tree.score(X_test, y_test)))
+
+print("---------------BRUTE-----------------")
+
+instancia_knn_brute = KNeighborsClassifier(n_neighbors=k,algorithm='brute')
+
+instancia_knn_brute.fit(X_train,y_train)
+
+print("Las predicciones en Testing son: {}".format(instancia_knn_brute.predict(X_test)))
+
+print("Precisión en Testing: {:.2f}".format(instancia_knn_brute.score(X_test, y_test)))
+
+prediccion = instancia_knn_brute.predict(X_test)
+MC = confusion_matrix(y_test, prediccion)
+print("Matriz de Confusión:\n{}".format(MC))
+
+def plot_confusion_matrix(cm, target_names, title = 'Matriz de Confusion',cmap = None, normalize = True):
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import itertools
+    
+    accuracy = np.trace(cm) / float(np.sum(cm))
+    misclass = 1 - accuracy
+    if cmap is None:
+        cmap = plt.get_cmap('Blues')
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    plt.figure(figsize = (8, 6))
+    plt.imshow(cm, interpolation = 'nearest', cmap = cmap)
+    plt.title(title)
+    plt.colorbar()
+    
+    if target_names is not None:
+        tick_marks = np.arange(len(target_names))
+        plt.xticks(tick_marks, target_names, rotation = 45)
+        plt.yticks(tick_marks, target_names)
+            
+    thresh = cm.max() / 1.5 if normalize else cm.max() / 2
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        if normalize:
+            plt.text(j, i, "{:0.4f}".format(cm[i, j]), horizontalalignment="center",color="white" if cm[i, j] > thresh else "black")
+        else:
+            plt.text(j, i, "{:,}".format(cm[i, j]), horizontalalignment="center", color="white" if cm[i, j] > thresh else "black")
+    plt.tight_layout()
+    plt.xlabel('Precision Global={:0.4f}; Error Global={:0.4f}'.format(accuracy, misclass))
+    
+plot_confusion_matrix(MC, unique_labels(datos_caras['Nombres']), title = "Real",
+normalize = False)
