@@ -21,7 +21,7 @@ os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VII Lecture")
 
 pd.set_option('display.max_rows', 1000)
 
-datos = pd.read_csv('Titanic.csv',delimiter=',',decimal=".",index_col=0)
+datos = pd.read_csv('titanic.csv',delimiter=',',decimal=".",index_col=0)
 
 def recodificar(col, nuevo_codigo):
   col_cod = pd.Series(col, copy=True)
@@ -29,17 +29,26 @@ def recodificar(col, nuevo_codigo):
     col_cod.replace(llave, valor, inplace=True)
   return col_cod
 
-datos["Sex"] = recodificar(datos["Sex"], {'male':0, 'female':1})
-datos["Embarked"] = recodificar(datos["Embarked"], {'C':1, 'Q':2,'S':3})
+datos["Survived"] = recodificar(datos["Survived"], {0 : 'No', 1: 'Yes'})
+datos["Pclass"] = recodificar(datos["Pclass"], {1 : 'First', 2: 'Second', 3: 'Third'})
 
 datos['Sex'] = datos['Sex'].astype('category')
 datos['Embarked'] = datos['Embarked'].astype('category')
+datos['Pclass'] = datos['Pclass'].astype('category')
+
+datos["Sex"] = datos["Sex"].cat.codes
+datos["Embarked"] = datos["Embarked"].cat.codes
+datos["Pclass"] = datos["Pclass"].cat.codes
+
+datos['Sex'] = datos['Sex'].astype('category')
+datos['Embarked'] = datos['Embarked'].astype('category')
+datos['Pclass'] = datos['Pclass'].astype('category')
 
 del[datos["Name"]]
 del[datos["Ticket"]]
-del[datos["Fare"]]
 del[datos["Cabin"]]
-del[datos["Age"]]
+
+datos = datos.fillna(np.mean(datos))
 
 print(datos.head())
 
@@ -85,7 +94,7 @@ cantidad = X_train.shape[0]
 
 k = math.sqrt(cantidad)
 
-k = math.trunc(k)
+k = round(k)
 
 #Distitnos metodos KNN
 
