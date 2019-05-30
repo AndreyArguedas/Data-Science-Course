@@ -94,7 +94,7 @@ cantidad = X_train.shape[0]
 
 k = math.sqrt(cantidad)
 
-k = round(k)
+k = math.trunc(k)
 
 #Distitnos metodos KNN
 
@@ -225,6 +225,8 @@ pd.set_option('display.max_rows', 1000)
 
 datos_caras = pd.read_csv('8carasFamosas.csv',delimiter=';',decimal=".",index_col=0)
 
+datos_caras['Sex'] = datos_caras['Sex'].astype('category')  
+
 print(datos_caras.head())
 
 
@@ -233,10 +235,10 @@ def centroide(num_cluster, datos, clusters):
   return(pd.DataFrame(datos[ind].mean()).T)
 
     
-def plot_image(valor_cara, titulo = None, filas = 62, cols = 42):
+def plot_image(valor_cara, titulo = None, filas = 62, cols = 47):
     image = np.array(list(reversed(valor_cara)))
     image = pd.to_numeric(image, errors = 'coerce')
-    image = image.reshape(62, 47)
+    image = image.reshape(filas, cols)
     plt.imshow(image, cmap = "pink")
     ejes = plt.gca()
     ejes.axes.get_xaxis().set_visible(False)
@@ -252,29 +254,47 @@ for i in range(1, 9):
     plt.subplot(2, 4, i)
     cara = random.randint(0, datos_caras.shape[0])
     plot_image(datos_caras.iloc[cara, range(2914)], datos_caras.iloc[cara, range(2914)])
-    
+
+
+  
     
 #C.1
     
 #Debemos remover la columna de Nombres
     
-predecir_col = datos_caras.iloc[:,2913:2914]
+X = datos_caras.iloc[:, :-1]
 
-print(predecir_col.head())
-
-datos_caras = datos_caras.iloc[:,:2913]
-
-print(datos_caras.head())
+print(X.head())
     
-grupos = fcluster(linkage(pdist(datos_caras), method = 'ward', metric='euclidean'), 8, criterion = 'maxclust')
-grupos = grupos-1 # Se resta 1 para que los clústeres se enumeren de 0 a (K-1), como usualmente lo hace Python
-# El siguiente print es para ver en qué cluster quedó cada individuo
-print(grupos)
+y = datos_caras.iloc[:,-1]
 
-ward_res = ward(datos_caras)
+print(y.head())
+
+
+
+ward_res = ward(X)
 
 dendrogram(ward_res,labels= datos_caras.index.tolist())
+
 open_close_plot()
+
+
+grupos = fcluster(linkage(pdist(X), method = 'ward', metric='euclidean'), 8, criterion = 'maxclust')
+grupos = grupos-1 # Se resta 1 para que los clústeres se enumeren de 0 a (K-1), como usualmente lo hace Python
+
+
+centros = np.array(pd.concat([centroide(0, X, grupos),
+                              centroide(1, X, grupos),
+                              centroide(2, X, grupos),
+                              centroide(3, X, grupos),
+                              centroide(4, X, grupos),
+                              centroide(5, X, grupos),
+                              centroide(6, X, grupos),
+                              centroide(7, X, grupos)]))
+
+for i in range(8):
+    plot_image(np.append(centros[i], 7), f'Clúster {i}')
+    plt.show()
 
 #C.2
 
@@ -292,24 +312,10 @@ print(predecir_col.head())
 
 X = datos_caras.iloc[:,:2913]
 
+print(X.head())
+
 X_train, X_test, y_train, y_test = train_test_split(X, predecir_col, train_size=0.8, random_state=0)
 
-print("========Tabla de entrenamiento========")
-
-print(X_train.head())
-
-print("========Tabla de test========")
-
-print(X_test.head())
-
-print("========Tabla de entrenamiento a predecir========")
-
-print(y_train.head())
-
-
-print("========Tabla de test a predecir========")
-
-print(y_test.head())
 
 #C.3
 
@@ -327,8 +333,6 @@ instancia_knn_auto = KNeighborsClassifier(n_neighbors=k,algorithm='auto')
 
 instancia_knn_auto.fit(X_train,y_train)
 
-print("Las predicciones en Testing son: {}".format(instancia_knn_auto.predict(X_test)))
-
 print("Precisión en Testing: {:.2f}".format(instancia_knn_auto.score(X_test, y_test)))
 
 print("---------------BALL TREE-----------------")
@@ -337,7 +341,6 @@ instancia_knn_ball_tree = KNeighborsClassifier(n_neighbors=k,algorithm='ball_tre
 
 instancia_knn_ball_tree.fit(X_train,y_train)
 
-print("Las predicciones en Testing son: {}".format(instancia_knn_ball_tree.predict(X_test)))
 
 print("Precisión en Testing: {:.2f}".format(instancia_knn_ball_tree.score(X_test, y_test)))
 
@@ -348,7 +351,6 @@ instancia_knn_kd_tree = KNeighborsClassifier(n_neighbors=k,algorithm='kd_tree')
 
 instancia_knn_kd_tree.fit(X_train,y_train)
 
-print("Las predicciones en Testing son: {}".format(instancia_knn_kd_tree.predict(X_test)))
 
 print("Precisión en Testing: {:.2f}".format(instancia_knn_kd_tree.score(X_test, y_test)))
 
@@ -357,8 +359,6 @@ print("---------------BRUTE-----------------")
 instancia_knn_brute = KNeighborsClassifier(n_neighbors=k,algorithm='brute')
 
 instancia_knn_brute.fit(X_train,y_train)
-
-print("Las predicciones en Testing son: {}".format(instancia_knn_brute.predict(X_test)))
 
 print("Precisión en Testing: {:.2f}".format(instancia_knn_brute.score(X_test, y_test)))
 
@@ -396,5 +396,12 @@ def plot_confusion_matrix(cm, target_names, title = 'Matriz de Confusion',cmap =
     plt.tight_layout()
     plt.xlabel('Precision Global={:0.4f}; Error Global={:0.4f}'.format(accuracy, misclass))
     
+plot_confusion_matrix(MC, unique_labels(datos_caras['Nombres']), title = "Real",
+normalize = False)
+
+prediccion = instancia_knn_auto.predict(X_test)
+MC = confusion_matrix(y_test, prediccion)
+print("Matriz de Confusión:\n{}".format(MC))
+
 plot_confusion_matrix(MC, unique_labels(datos_caras['Nombres']), title = "Real",
 normalize = False)
