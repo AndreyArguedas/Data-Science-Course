@@ -165,3 +165,127 @@ def resumenMatrizPrecisiones(instancia, X_testP, y_testP, yP):
 print("Matriz de confusion y precisiones")
 
 resumenMatrizPrecisiones(instancia_red, X_test, y_test, y)
+
+
+
+
+
+
+
+#Ejercicio 2
+
+
+
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import mglearn
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
+import math
+import random
+from   sklearn.datasets import make_blobs
+# Import the dendrogram function and the ward, single, complete, average, linkage and fcluster clustering function from SciPy
+from scipy.cluster.hierarchy import dendrogram, ward, single, complete,average,linkage, fcluster
+from scipy.spatial.distance import pdist
+from sklearn.utils.multiclass import unique_labels
+    
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VII Lecture")
+
+pd.set_option('display.max_rows', 1000)
+
+datos_caras = pd.read_csv('8carasFamosas.csv',delimiter=';',decimal=".",index_col=0)
+
+
+print(datos_caras.head())
+
+
+def centroide(num_cluster, datos, clusters):
+  ind = clusters == num_cluster
+  return(pd.DataFrame(datos[ind].mean()).T)
+
+    
+def plot_image(valor_cara, titulo = None, filas = 62, cols = 47):
+    image = np.array(list(reversed(valor_cara)))
+    image = pd.to_numeric(image, errors = 'coerce')
+    image = image.reshape(filas, cols)
+    plt.imshow(image, cmap = "pink")
+    ejes = plt.gca()
+    ejes.axes.get_xaxis().set_visible(False)
+    ejes.axes.get_yaxis().set_visible(False)
+    if titulo is not None:
+        plt.title(titulo)
+        
+plot_image(datos_caras.iloc[0, range(2914)], datos_caras.iloc[0, range(2914)])
+
+       
+
+for i in range(1, 9):
+    plt.subplot(2, 4, i)
+    cara = random.randint(0, datos_caras.shape[0])
+    plot_image(datos_caras.iloc[cara, range(2914)], datos_caras.iloc[cara, range(2914)])
+
+    
+X = datos_caras.iloc[:, :-1]
+
+print(X.head())
+    
+y = datos_caras.iloc[:,-1]
+
+print(y.head())
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=0)
+
+
+#2b
+
+instancia_red = MLPClassifier(solver='lbfgs', random_state=0)
+print(instancia_red)
+
+instancia_red.fit(X_train,y_train)
+
+print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
+
+# 50 capas, 50 nodos
+instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[50, 50])
+
+instancia_red.fit(X_train,y_train)
+
+print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
+
+
+# 500 capas, 500 nodos
+instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[500, 500])
+
+instancia_red.fit(X_train,y_train)
+
+print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
+
+
+#1000 capas, 1000 nodos
+
+instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[1000, 1000])
+
+instancia_red.fit(X_train,y_train)
+
+print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
+
+#Mejor resultado 61 * 61
+
+instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[61, 61])
+
+instancia_red.fit(X_train,y_train)
+
+print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
+
+for i in range(1, 100):
+    for j in range(1, 100):
+        instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[61, i])
+
+        instancia_red.fit(X_train,y_train)
+
+        print(i, j)
+        print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))

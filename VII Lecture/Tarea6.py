@@ -15,9 +15,12 @@ import mglearn
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
+from   sklearn.model_selection import train_test_split
+from   sklearn.neural_network import MLPClassifier
+from   sklearn.metrics import confusion_matrix
 import math
 
-os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VII Lecture")
+os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VIII Lecture")
 
 pd.set_option('display.max_rows', 1000)
 
@@ -30,11 +33,10 @@ def recodificar(col, nuevo_codigo):
   return col_cod
 
 datos["Survived"] = recodificar(datos["Survived"], {0 : 'No', 1: 'Yes'})
-datos["Pclass"] = recodificar(datos["Pclass"], {1 : 'First', 2: 'Second', 3: 'Third'})
 
+datos['Pclass'] = datos['Pclass'].astype('category')
 datos['Sex'] = datos['Sex'].astype('category')
 datos['Embarked'] = datos['Embarked'].astype('category')
-datos['Pclass'] = datos['Pclass'].astype('category')
 
 datos["Sex"] = datos["Sex"].cat.codes
 datos["Embarked"] = datos["Embarked"].cat.codes
@@ -48,9 +50,12 @@ del[datos["Name"]]
 del[datos["Ticket"]]
 del[datos["Cabin"]]
 
+#Imputando la edad con la moda
 datos = datos.fillna(np.mean(datos))
 
 print(datos.head())
+
+print(datos.info())
 
 #2.2
 
@@ -166,10 +171,10 @@ def precisiones(MC):
             "Asertividad Positiva": VP / (FP + VP),
             "Asertividad Negativa": VN / (FN + VN)}
 
-def resumenMatrizPrecisiones(instancia):
-    prediccion = instancia.predict(X_test)
-    MC = confusion_matrix(y_test, prediccion)
-    indices = indices_general(MC,list(np.unique(y)))
+def resumenMatrizPrecisiones(instancia, X_testP, y_testP, yP):
+    prediccion = instancia.predict(X_testP)
+    MC = confusion_matrix(y_testP, prediccion)
+    indices = indices_general(MC,list(np.unique(yP)))
     
     for k in indices:
         print("\n%s:\n%s"%(k,str(indices[k])))
@@ -183,21 +188,21 @@ def resumenMatrizPrecisiones(instancia):
     
 print("Matriz de confusion y precisiones para modelo auto")
 
-resumenMatrizPrecisiones(instancia_knn_auto)
+resumenMatrizPrecisiones(instancia_knn_auto, X_test, y_test, y)
 
 
 print("Matriz de confusion y precisiones para modelo BALL TREE")
 
-resumenMatrizPrecisiones(instancia_knn_ball_tree)
+resumenMatrizPrecisiones(instancia_knn_ball_tree, X_test, y_test, y)
 
 
 print("Matriz de confusion y precisiones para modelo KD TREE")
 
-resumenMatrizPrecisiones(instancia_knn_kd_tree)
+resumenMatrizPrecisiones(instancia_knn_kd_tree,X_test, y_test, y)
 
 print("Matriz de confusion y precisiones para modelo BRUTE")
 
-resumenMatrizPrecisiones(instancia_knn_brute)
+resumenMatrizPrecisiones(instancia_knn_brute, X_test, y_test, y)
     
 
     
