@@ -119,3 +119,49 @@ instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=
 instancia_red.fit(X_train,y_train)
 
 print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
+
+#1.d
+
+def indices_general(MC, nombres = None):
+    precision_global = np.sum(MC.diagonal()) / np.sum(MC)
+    error_global = 1 - precision_global
+    precision_categoria  = pd.DataFrame(MC.diagonal()/np.sum(MC,axis = 1)).T
+    if nombres!=None:
+        precision_categoria.columns = nombres
+    return {"Matriz de Confusión":MC, 
+            "Precisión Global":precision_global, 
+            "Error Global":error_global, 
+            "Precisión por Categoría":precision_categoria}
+    
+def precisiones(MC):
+    VN = MC[0][0]
+    FP = MC[0][1]
+    FN = MC[1][0]
+    VP = MC[1][1]
+    
+    return {"Precision Global": (VN + VP) / (VN + FP + FN + VP), 
+            "Precisión Positiva": VP / (FN + VP), 
+            "Precisión Negativa": VN / (VN + FP), 
+            "Precisión Falsos Positivos": FP / (VN + FP),
+            "Precisión Falsos Negativos": FN / (VP + FN),
+            "Asertividad Positiva": VP / (FP + VP),
+            "Asertividad Negativa": VN / (FN + VN)}
+
+def resumenMatrizPrecisiones(instancia, X_testP, y_testP, yP):
+    prediccion = instancia.predict(X_testP)
+    MC = confusion_matrix(y_testP, prediccion)
+    indices = indices_general(MC,list(np.unique(yP)))
+    
+    for k in indices:
+        print("\n%s:\n%s"%(k,str(indices[k])))
+    
+    #Extrayendo precisiones
+
+    p = precisiones(MC)
+
+    for k in p:
+        print("\n%s:\n%s"%(k,str(p[k])))
+        
+print("Matriz de confusion y precisiones")
+
+resumenMatrizPrecisiones(instancia_red, X_test, y_test, y)

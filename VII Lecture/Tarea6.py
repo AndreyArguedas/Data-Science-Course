@@ -167,7 +167,7 @@ def precisiones(MC):
             "Asertividad Negativa": VN / (FN + VN)}
 
 def resumenMatrizPrecisiones(instancia):
-    prediccion = instancia_knn_auto.predict(X_test)
+    prediccion = instancia.predict(X_test)
     MC = confusion_matrix(y_test, prediccion)
     indices = indices_general(MC,list(np.unique(y)))
     
