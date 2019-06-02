@@ -273,7 +273,7 @@ instancia_red.fit(X_train,y_train)
 
 print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
 
-#Mejor resultado 61 * 61
+#Mejor resultado 61 * 61 = 0.805
 
 instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[61, 61])
 
@@ -281,11 +281,18 @@ instancia_red.fit(X_train,y_train)
 
 print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
 
+values = {"value" : 0, "i" : 0, "j" : 0}
+ 
 for i in range(1, 100):
     for j in range(1, 100):
-        instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[61, i])
-
+        instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[i, j])
         instancia_red.fit(X_train,y_train)
-
         print(i, j)
-        print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
+        newVal = instancia_red.score(X_test, y_test)
+        if(newVal > values["value"]):
+            values["value"] = newVal
+            values["i"] = i
+            values["j"] = j
+            print("Precisión en Testing: {:.3f}".format(newVal))
+  
+print(values["value"])      
