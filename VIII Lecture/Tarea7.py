@@ -407,11 +407,36 @@ v = np.append(v, u)
 w = np.empty(3) 
 w.fill(0)
 
-print(u)
-print(v)
-print(w)
-
+tabla = np.array([[1, 0, 0, 1], [1, 0, 1, 1], [1, 1, 0, 1], [1, 1, 1, 0]]) 
 
 #I(t)
 def identity(value, compare):
     return 1 if value >= compare else 0
+
+def sigmoidea(w, tabla, sigma, i):
+    result = 0
+    for j in range(0, len(w)):
+        result += w[j] * tabla[i][j] - sigma
+    return result
+
+def sumatoria(w, tabla, sigma, compare):
+    result = 0
+    z_final = []
+    for i in range(0, len(tabla[0])):
+        result += sigmoidea(w, tabla, sigma, i)
+        t = result - tabla[3][i]
+        t = 1/4 * t * t
+        z_final.append(identity(t, compare))
+    return z_final
+            
+
+for valor_sigma in v:
+    for peso_w in u:
+        w.fill(peso_w)
+        z = sumatoria(w, tabla, valor_sigma, 0.5) 
+        if((z==tabla[ : , 3]).all()):
+            print("Valido")
+            print(peso_w)
+            print(valor_sigma)
+    
+            
