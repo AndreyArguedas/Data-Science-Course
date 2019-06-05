@@ -8,21 +8,14 @@ Created on Sat Jun  1 15:14:07 2019
 import os
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import mglearn
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix
-from   sklearn.model_selection import train_test_split
 from   sklearn.neural_network import MLPClassifier
-from   sklearn.metrics import confusion_matrix
-import math
+from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential      
 from keras.layers import Dense
 from keras.layers import Reshape
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
-from sklearn.preprocessing import MinMaxScaler
+from   sklearn.metrics import confusion_matrix
 
 os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VIII Lecture")
 
@@ -55,6 +48,7 @@ del[datos["Ticket"]]
 del[datos["Cabin"]]
 
 #Imputando la edad con la moda
+#Imputando la edad con la moda
 datos = datos.fillna(np.mean(datos))
 
 print(datos.head())
@@ -84,11 +78,11 @@ print(y_train.head())
 
 print(y_test.head())
 
-#1.c
+
+
 
 #100 nodos
 instancia_red = MLPClassifier(solver='lbfgs', random_state=0)
-print(instancia_red)
 
 instancia_red.fit(X_train,y_train)
 
@@ -126,42 +120,7 @@ instancia_red.fit(X_train,y_train)
 
 print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
 
-#Version de KERAS
-
-dummy_y = pd.get_dummies(y)
-dummy_X = pd.get_dummies(X)
-
-print(dummy_X.head())
-print(dummy_y.head())
-
-scaler = MinMaxScaler(feature_range = (0, 1))
-scaled_dummy_X  = pd.DataFrame(scaler.fit_transform(dummy_X), columns = list(dummy_X))
-
-X_train, X_test, y_train, y_test = train_test_split(scaled_dummy_X, dummy_y, train_size=0.75, random_state = 0)
-
-print(X_train.head())
-print(X_test.head())
-
-print(y_train.head())
-print(y_test.head())
-
-model = Sequential()
-model.add(Dense(5, input_dim = 13, activation = 'relu'))  # Agregamos primera capa oculta
-model.add(Dense(3, activation = 'relu'))  # Agregamos tercera capa oculta
-model.add(Dense(1, activation = 'sigmoid')) # Agregamos capa output
-
-model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
-
-print(model.summary())
-
-model.fit(X_train, y_train, epochs = 100, batch_size = 50, verbose = 0)
-
-y_pred = np.round(model.predict(X_test))  # Redondeamos pues obtenemos un número entre 0 y 1
-
-scores = model.evaluate(X_test, y_test)
-
-print(model.metrics_names[1], scores[1])
-
+print("Matriz de confusion y precisiones")
 
 #1.d
 
@@ -204,12 +163,50 @@ def resumenMatrizPrecisiones(instancia, X_testP, y_testP, yP):
 
     for k in p:
         print("\n%s:\n%s"%(k,str(p[k])))
-        
-print("Matriz de confusion y precisiones")
 
 resumenMatrizPrecisiones(instancia_red, X_test, y_test, y)
 
 
+#Version de KERAS
+
+dummy_y = pd.get_dummies(y)
+dummy_X = pd.get_dummies(X)
+
+print(dummy_X.head())
+print(dummy_y.head())
+
+scaler = MinMaxScaler(feature_range = (0, 1))
+scaled_dummy_X  = pd.DataFrame(scaler.fit_transform(dummy_X), columns = list(dummy_X))
+
+X_train, X_test, y_train, y_test = train_test_split(scaled_dummy_X, dummy_y, train_size=0.75, random_state = 0)
+
+print(X_train.head())
+print(X_test.head())
+
+print(y_train.head())
+print(y_test.head())
+
+model = Sequential()
+model.add(Dense(26, input_dim = 13, activation = 'relu'))  # Agregamos primera capa oculta
+model.add(Dense(11, activation = 'relu'))  # Agregamos primera capa oculta
+model.add(Dense(6, activation = 'relu'))  # Agregamos tercera capa oculta
+model.add(Dense(2, activation = 'sigmoid')) # Agregamos capa output
+
+model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
+
+print(model.summary())
+
+model.fit(X_train, y_train, epochs = 78, batch_size = 10, verbose = 0)
+
+y_pred = np.round(model.predict(X_test))  # Redondeamos pues obtenemos un número entre 0 y 1
+
+scores = model.evaluate(X_test, y_test)
+
+print(model.metrics_names[1], scores[1])
+
+
+
+resumenMatrizPrecisiones(instancia_red, X_test, y_test, y)
 
 
 
@@ -227,11 +224,15 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
 import math
 import random
+from sklearn.preprocessing import MinMaxScaler
 from   sklearn.datasets import make_blobs
 # Import the dendrogram function and the ward, single, complete, average, linkage and fcluster clustering function from SciPy
 from scipy.cluster.hierarchy import dendrogram, ward, single, complete,average,linkage, fcluster
 from scipy.spatial.distance import pdist
 from sklearn.utils.multiclass import unique_labels
+from keras.models import Sequential      
+from keras.layers import Dense
+from keras.layers import Reshape
     
 os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VII Lecture")
 
@@ -374,10 +375,8 @@ print(y_test.head())
 
 
 model = Sequential()
-model.add(Dense(10, input_dim = 2913, activation = 'relu'))  # Agregamos primera capa oculta con 10 neuronas
-model.add(Dense(8, activation = 'relu'))  # Agregamos segunda capa oculta con 8 neuronas
-model.add(Dense(6, activation = 'relu'))  # Agregamos tercera capa oculta con 6 neuronas
-model.add(Dense(1, activation = 'softmax')) # Agregamos capa output con 3 neuronas
+model.add(Dense(50, input_dim = 2913, activation = 'relu'))  # Agregamos primera capa oculta con 10 neuronas
+model.add(Dense(8, activation = 'softmax')) # Agregamos capa output con 3 neuronas
 
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 
@@ -396,3 +395,28 @@ scores = model.evaluate(X_test, y_test)
 
 print(model.metrics_names[1], scores[1])
 
+
+
+#Ejercicio 4
+
+"""
+
+import numpy as np
+
+u = [x / 10 for x in range(0, 11)]
+
+
+
+print(u)
+print(v)
+
+def arraysIncrementables(inicio = 0, final = 1, incremento = 0.10):
+    values = []
+    while inicio < final:
+        values.append(inicio + incremento)
+        inicio = inicio + incremento
+        print(inicio)
+    return values
+
+sigmaValues = arraysIncrementables()
+"""
