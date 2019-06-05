@@ -398,25 +398,20 @@ print(model.metrics_names[1], scores[1])
 
 
 #Ejercicio 4
+u = np.arange(0, 1.1, 0.1)
 
-"""
+v = np.arange(-1, 0, 0.1)
 
-import numpy as np
+v = np.append(v, u)
 
-u = [x / 10 for x in range(0, 11)]
-
-
+w = np.empty(3) 
+w.fill(0)
 
 print(u)
 print(v)
+print(w)
 
-def arraysIncrementables(inicio = 0, final = 1, incremento = 0.10):
-    values = []
-    while inicio < final:
-        values.append(inicio + incremento)
-        inicio = inicio + incremento
-        print(inicio)
-    return values
 
-sigmaValues = arraysIncrementables()
-"""
+#I(t)
+def identity(value, compare):
+    return 1 if value >= compare else 0
