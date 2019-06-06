@@ -105,7 +105,7 @@ k = math.trunc(k)
 
 print("---------------AUTO-----------------")
 
-instancia_knn_auto = KNeighborsClassifier(n_neighbors=k,algorithm='auto')
+instancia_knn_auto = KNeighborsClassifier(algorithm='auto')
 
 instancia_knn_auto.fit(X_train,y_train)
 
@@ -115,7 +115,7 @@ print("Precisión en Testing: {:.2f}".format(instancia_knn_auto.score(X_test, y_
 
 print("---------------BALL TREE-----------------")
 
-instancia_knn_ball_tree = KNeighborsClassifier(n_neighbors=k,algorithm='ball_tree')
+instancia_knn_ball_tree = KNeighborsClassifier(algorithm='ball_tree')
 
 instancia_knn_ball_tree.fit(X_train,y_train)
 
@@ -126,7 +126,7 @@ print("Precisión en Testing: {:.2f}".format(instancia_knn_ball_tree.score(X_tes
 
 print("---------------KD TREE-----------------")
 
-instancia_knn_kd_tree = KNeighborsClassifier(n_neighbors=k,algorithm='kd_tree')
+instancia_knn_kd_tree = KNeighborsClassifier(algorithm='kd_tree')
 
 instancia_knn_kd_tree.fit(X_train,y_train)
 
@@ -136,7 +136,7 @@ print("Precisión en Testing: {:.2f}".format(instancia_knn_kd_tree.score(X_test,
 
 print("---------------BRUTE-----------------")
 
-instancia_knn_brute = KNeighborsClassifier(n_neighbors=k,algorithm='brute')
+instancia_knn_brute = KNeighborsClassifier(algorithm='brute')
 
 instancia_knn_brute.fit(X_train,y_train)
 
@@ -229,8 +229,6 @@ os.chdir("/Users/Andrey/Desktop/Data-Science-Course/VII Lecture")
 pd.set_option('display.max_rows', 1000)
 
 datos_caras = pd.read_csv('8carasFamosas.csv',delimiter=';',decimal=".",index_col=0)
-
-datos_caras['Sex'] = datos_caras['Sex'].astype('category')  
 
 print(datos_caras.head())
 
@@ -334,7 +332,7 @@ print(k)
 
 print("---------------AUTO-----------------")
 
-instancia_knn_auto = KNeighborsClassifier(n_neighbors=k,algorithm='auto')
+instancia_knn_auto = KNeighborsClassifier(n_neighbors = 3, algorithm='auto')
 
 instancia_knn_auto.fit(X_train,y_train)
 
@@ -342,7 +340,7 @@ print("Precisión en Testing: {:.2f}".format(instancia_knn_auto.score(X_test, y_
 
 print("---------------BALL TREE-----------------")
 
-instancia_knn_ball_tree = KNeighborsClassifier(n_neighbors=k,algorithm='ball_tree')
+instancia_knn_ball_tree = KNeighborsClassifier(n_neighbors = 3, algorithm='ball_tree')
 
 instancia_knn_ball_tree.fit(X_train,y_train)
 
@@ -352,7 +350,7 @@ print("Precisión en Testing: {:.2f}".format(instancia_knn_ball_tree.score(X_tes
 
 print("---------------KD TREE-----------------")
 
-instancia_knn_kd_tree = KNeighborsClassifier(n_neighbors=k,algorithm='kd_tree')
+instancia_knn_kd_tree = KNeighborsClassifier(n_neighbors = 3, algorithm='kd_tree')
 
 instancia_knn_kd_tree.fit(X_train,y_train)
 
@@ -361,7 +359,7 @@ print("Precisión en Testing: {:.2f}".format(instancia_knn_kd_tree.score(X_test,
 
 print("---------------BRUTE-----------------")
 
-instancia_knn_brute = KNeighborsClassifier(n_neighbors=k,algorithm='brute')
+instancia_knn_brute = KNeighborsClassifier(n_neighbors = 3, algorithm='brute')
 
 instancia_knn_brute.fit(X_train,y_train)
 
@@ -405,6 +403,30 @@ plot_confusion_matrix(MC, unique_labels(datos_caras['Nombres']), title = "Real",
 normalize = False)
 
 prediccion = instancia_knn_auto.predict(X_test)
+MC = confusion_matrix(y_test, prediccion)
+print("Matriz de Confusión:\n{}".format(MC))
+
+plot_confusion_matrix(MC, unique_labels(datos_caras['Nombres']), title = "Real",
+normalize = False)
+
+
+
+prediccion = instancia_knn_ball_tree.predict(X_test)
+MC = confusion_matrix(y_test, prediccion)
+print("Matriz de Confusión:\n{}".format(MC))
+
+plot_confusion_matrix(MC, unique_labels(datos_caras['Nombres']), title = "Real",
+normalize = False)
+
+prediccion = instancia_knn_kd_tree.predict(X_test)
+MC = confusion_matrix(y_test, prediccion)
+print("Matriz de Confusión:\n{}".format(MC))
+
+plot_confusion_matrix(MC, unique_labels(datos_caras['Nombres']), title = "Real",
+normalize = False)
+
+
+prediccion = instancia_knn_brute.predict(X_test)
 MC = confusion_matrix(y_test, prediccion)
 print("Matriz de Confusión:\n{}".format(MC))
 

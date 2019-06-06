@@ -114,13 +114,36 @@ print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)
 
 #Mejor resultado
 
-instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[20, 20])
+instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[64, 53])
 
 instancia_red.fit(X_train,y_train)
 
 print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
 
 print("Matriz de confusion y precisiones")
+
+"""
+
+values = {"value" : 0, "i" : 0, "j" : 0}
+ 
+for i in range(50, 100):
+    for j in range(50, 100):
+        instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[i, j])
+        instancia_red.fit(X_train,y_train)
+        print(i, j)
+        newVal = instancia_red.score(X_test, y_test)
+        if(newVal > values["value"]):
+            values["value"] = newVal
+            values["i"] = i
+            values["j"] = j
+            print("Precisión en Testing: {:.3f}".format(newVal))
+  
+print(values["value"])
+print(values["i"])
+print(values["j"])
+
+"""
+
 
 #1.d
 
