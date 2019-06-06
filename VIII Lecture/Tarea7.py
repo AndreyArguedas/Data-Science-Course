@@ -424,8 +424,8 @@ def sumatoria(w, tabla, sigma, compare):
     z_final = []
     for i in range(0, len(tabla[0])):
         result += sigmoidea(w, tabla, sigma, i)
-        t = result - tabla[3][i]
-        t = 1/4 * t * t
+        t = result - tabla[i][3]
+        t = 1/4 * t ** 2
         z_final.append(identity(t, compare))
     return z_final
             
@@ -434,8 +434,9 @@ for valor_sigma in v:
     for peso_w in u:
         w.fill(peso_w)
         z = sumatoria(w, tabla, valor_sigma, 0.5) 
-        if((z==tabla[ : , 3]).all()):
+        if((z == tabla[ : , 3]).all()):
             print("Valido")
+            print(z)
             print(peso_w)
             print(valor_sigma)
     
