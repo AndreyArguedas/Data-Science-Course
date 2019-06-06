@@ -243,8 +243,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import mglearn
 from sklearn.model_selection import train_test_split
+from   sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix
 import math
 import random
 from sklearn.preprocessing import MinMaxScaler
@@ -338,9 +340,9 @@ instancia_red.fit(X_train,y_train)
 
 print("Precisión en Testing: {:.3f}".format(instancia_red.score(X_test, y_test)))
 
-#Mejor resultado 61 * 61 = 0.805
+#Mejor resultado 65 * 71 = 0.805
 
-instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[61, 61])
+instancia_red = MLPClassifier(solver='lbfgs', random_state=0,hidden_layer_sizes=[65, 71])
 
 instancia_red.fit(X_train,y_train)
 
@@ -421,11 +423,15 @@ print(model.metrics_names[1], scores[1])
 
 
 #Ejercicio 4
-u = np.arange(0, 1.1, 0.1)
 
-v = np.arange(-1, 0, 0.1)
 
-v = np.append(v, u)
+#Ejercicio 4
+import numpy as np
+import math
+
+v = [x/10 for x in range(-10, 11)]
+
+u = [x/10 for x in range(0, 11)]
 
 w = np.empty(3) 
 w.fill(0)
@@ -439,28 +445,90 @@ def identity(value, compare):
 def sigmoidea(w, tabla, sigma, i):
     result = 0
     for j in range(0, len(w)):
-        result += w[j] * tabla[i][j] - sigma
+        result += w[j] * tabla[i][j] 
     return result
 
 def sumatoria(w, tabla, sigma, compare):
     result = 0
     z_final = []
     for i in range(0, len(tabla[0])):
-        result += sigmoidea(w, tabla, sigma, i)
+        result += sigmoidea(w, tabla, sigma, i) - sigma
         t = result - tabla[i][3]
         t = 1/4 * t ** 2
         z_final.append(identity(t, compare))
     return z_final
             
+soluciones = 0
+for w1 in v:
+        for w2 in v:
+            for w3 in v:
+                for valor_sigma in u:
+                    z = sumatoria([w1, w2, w3], tabla, valor_sigma, 0.5) 
+                    if((z == tabla[ : , 3]).all()):
+                        print("Valido")
+                        print([w1, w2, w3])
+                        print(valor_sigma)
+                        soluciones += 1
+                        print(soluciones)
 
-for valor_sigma in v:
-    for peso_w in u:
-        w.fill(peso_w)
-        z = sumatoria(w, tabla, valor_sigma, 0.5) 
-        if((z == tabla[ : , 3]).all()):
-            print("Valido")
-            print(z)
-            print(peso_w)
-            print(valor_sigma)
-    
+
+
+
+
+"""
+u = np.arange(0, 1.1, 0.1)
+
+v = np.arange(-1, 0, 0.1)
+
+v = np.append(v, u)
+
+w = np.empty(3) 
+w.fill(0)
+
+import numpy as np
+import math
+
+tabla = np.array([[1, 0, 0, 1], [1, 0, 1, 1], [1, 1, 0, 1], [1, 1, 1, 0]]) 
+
+#I(t)
+def identity(value, compare):
+    return 1 if value >= compare else 0
+
+
+def sigmoidea(w, tabla, sigma):
+    result = 0
+    for j in range(len(w)):
+        result += w[j] * tabla[j]
+    return 1 / 1 + math.exp(-(result - sigma))
+
+def sumatoria(z, sigmoidea, compare):
+    t = identity(sigmoidea, compare)
+    t -= z
+    t = t ** 2
+    return t
             
+v = [x/10 for x in range(-10, 11)]
+u = [x/10 for x in range(0, 11)]
+tabla = np.array([[1, 0, 0, 1], [1, 0, 1, 1], [1, 1, 0, 1], [1, 1, 1, 0]]) 
+
+soluciones = 0
+def calcularSigmoideasFilas():
+    for w1 in v:
+        for w2 in v:
+            for w3 in v:
+                for sigma in u:
+                    r1 = sigmoidea([w1, w2, w3], [1, 0, 0], sigma)
+                    r2 = sigmoidea([w1, w2, w3], [1, 0, 1], sigma)
+                    r3 = sigmoidea([w1, w2, w3], [1, 1, 0], sigma)
+                    r4 = sigmoidea([w1, w2, w3], [1, 1, 1], sigma)
+                    yield(w1, w2, w3, r1, r2, r3, r4, sigma)
+                    
+minimos = filter(lambda data: (((identity(data[3], 0.5) - tabla[0, 3]) +
+                               (identity(data[4], 0.5) - tabla[1, 3]) +
+                               (identity(data[5], 0.5) - tabla[2, 3]) +
+                               (identity(data[6], 0.5) - tabla[3, 3])) / 4) == 0, calcularSigmoideasFilas())
+                    
+
+for w1, w2, w3, r1, r2, r3, r4, sigma in minimos:
+    print(w1, w2, w3, r1, r2, r3, r4, sigma)
+"""           
